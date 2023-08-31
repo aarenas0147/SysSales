@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.aarenas.syssales.sales",
+  "variantName": "sales",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 12,
+      "versionName": "2.2.0",
+      "outputFile": "app-sales.apk"
+    }
+  ],
+  "elementType": "File"
+}

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SysSales"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m"
+        tools:replace="android:theme,android:icon,android:label,android:roundIcon">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:exported="true"
+            tools:replace="android:theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".OnboardingScreenActivity"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".SettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".SaleActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_sale"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".SaleDetailsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_sale_details" />
+        <activity
+            android:name=".CustomersActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_customers"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".ProductsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_products"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".SaleDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_sale_detail"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CustomerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_customer"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".SalesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_sales"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".CollectionSheetActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_collection_sheet"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".AccountsReceivableActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_accounts_receivable"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".CreditSaleQuotesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_credit_sale_quotes"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".CreditSaleQuoteActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_credit_sale_quote"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".SalePaymentMethodsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_payment_methods_by_sale"
+            android:theme="@style/Theme.SysSales.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
+            tools:replace="android:theme" />
+        <activity
+            android:name=".SalePaymentMethodActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/title_activity_payment_method_by_sale"
+            android:windowSoftInputMode="stateHidden" />
+    </application>
+
+</manifest>

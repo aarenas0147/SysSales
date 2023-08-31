@@ -1,0 +1,60 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/connection_header">
+
+        <EditTextPreference
+            app:key="hostname"
+            app:title="@string/server_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <Design.IntEditTextPreference
+            app:key="port"
+            app:title="@string/port_title"
+            android:inputType="number"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="application"
+            app:title="@string/application_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/design_header">
+
+        <ListPreference
+            android:defaultValue="@string/skin_default_value"
+            android:entries="@array/skin_option_labels"
+            android:entryValues="@array/skin_option_values"
+            app:enabled="false"
+            app:key="skin"
+            app:title="@string/skin_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/interface_header">
+
+        <SwitchPreferenceCompat
+            app:key="autocomplete_search"
+            app:title="@string/autocomplete_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/test_header">
+
+        <SwitchPreferenceCompat
+            app:key="depuration"
+            app:title="@string/depuration_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="depuration"
+            app:key="beta_upgrades"
+            app:summaryOff="@string/beta_upgrades_off"
+            app:summaryOn="@string/beta_upgrades_on"
+            app:title="@string/beta_upgrades_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

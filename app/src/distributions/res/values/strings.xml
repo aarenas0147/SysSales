@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sisdata Distribuciones</string>
+    <string name="commercial_app_name">Sisdata Distribuciones©</string>
+    <string name="copyright">Sisdata Distribuciones© - Distribuido para SISDATA PERÚ S.A.C</string>
+    <string name="update_url">https://www.dropbox.com/s/79eu2l213lkckpn/app_info.txt?dl=1</string>
+    <string name="update_url_beta">https://www.dropbox.com/s/nwar1p3dz7hzbfe/app_info_beta.txt?dl=1</string>
+</resources>

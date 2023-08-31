@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sisdata Comercial</string>
+    <string name="commercial_app_name">Sisdata Comercial©</string>
+    <string name="copyright">Sisdata Comercial© - Distribuido para SISDATA PERÚ S.A.C</string>
+    <string name="update_url">https://www.dropbox.com/s/27w9xs53fe0ducz/app_info.txt?dl=1</string>
+    <string name="update_url_beta">https://www.dropbox.com/s/wecn75hzl039t9d/app_info_beta.txt?dl=1</string>
+</resources>

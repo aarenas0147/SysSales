@@ -1,0 +1,165 @@
+<resources>
+    <string name="app_name">SysSales</string>
+    <string name="commercial_app_name">SysSales©</string>
+    <string name="copyright">SysSales© - Distribuido para SISDATA PERÚ S.A.C</string>
+    <string name="update_url">https://www.dropbox.com/s/mxg6bze4kxzezgn/app_info.txt?dl=1</string>
+    <string name="update_url_beta">https://www.dropbox.com/s/p1alwy49egxpo4w/app_info_beta.txt?dl=1</string>
+
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_sale">Ventas</string>
+    <string name="title_activity_sale_details">Detalle de venta</string>
+    <string name="tab_text_1">Datos</string>
+    <string name="tab_text_2">Detalle</string>
+    <string name="tab_text_3">Resumen</string>
+    <string name="title_activity_settings">Ajustes</string>
+    <string name="title_activity_sales">Ventas</string>
+    <string name="title_activity_customers">Clientes</string>
+    <string name="title_activity_customer">Cliente</string>
+    <string name="title_activity_products">Productos</string>
+    <string name="title_activity_sale_detail">Detalle del producto</string>
+    <string name="title_activity_collection_sheet">Planilla de cobranzas</string>
+    <string name="title_activity_accounts_receivable">Cuentas por cobrar</string>
+    <string name="title_activity_credit_sale_quotes">Historial de pagos</string>
+    <string name="title_activity_credit_sale_quote">Añadir pago</string>
+    <string name="title_activity_payment_methods_by_sale">Métodos de pago</string>
+    <string name="title_activity_payment_method_by_sale">Añadir método de pago</string>
+
+    <string name="message_result_ok">Consulta ejecutada correctamente</string>
+    <string name="message_changes_performed_successfully">Cambios realizados con éxito</string>
+    <string name="message_unrealized_changes">Cambios no realizados</string>
+    <string name="message_unconfigured_server_connection">¡Conexión al servidor no configurada!</string>
+    <string name="message_without_connection">Sin conexión con el servidor</string>
+    <string name="message_web_services_error">¡Error al obtener datos!</string>
+    <string name="message_no_data">No se encontraron resultados</string>
+    <string name="message_incomplete_data">¡Complete todos los datos!</string>
+    <string name="message_not_available">No disponible</string>
+    <string name="message_wrong_credentials">¡Credenciales incorrectas!</string>
+    <string name="message_unsupported_user">Usuario no admitido</string>
+    <string name="message_limit_exceeds">¡Excede el límite mínimo del Precio de Venta!</string>
+    <string name="message_not_exist_customer">¡Cliente no encontrado!</string>
+    <string name="message_find_customer">¿Desea buscar al cliente en línea?</string>
+    <string name="message_not_exist_and_create_customer">¡Cliente no encontrado! ¿Desea crearlo?</string>
+    <string name="message_print">¿Desea imprimir la venta?</string>
+    <string name="message_customer_disabled">¡El cliente se encuentra deshabilitado!</string>
+    <string name="message_customer_delinqued">¡El cliente presenta deudas!</string>
+    <string name="message_customer_not_belong_seller">¡Cliente no pertenece al vendedor!</string>
+
+    <string name="action_settings">Ajustes</string>
+    <string name="action_check_updates">Buscar actualizaciones</string>
+    <string name="action_edit_item">Editar</string>
+    <string name="action_delete_item">Eliminar</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_print">Imprimir</string>
+    <string name="action_cancel_item">Anular</string>
+
+    <string name="welcome_app_title">Bienvenido a %s</string>
+    <string name="welcome_app_description">Antes de continuar necesitamos que configures tu aplicación.</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="skip">Saltar</string>
+    <string name="get_started">Empezar</string>
+    <string name="finalize">Finalizar</string>
+
+    <string name="login">Autenticación de usuario</string>
+    <string name="user_name">Nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="remember_me">Recuérdame</string>
+    <string name="log_in">Iniciar sesión</string>
+    <string name="new_sale">Nueva venta</string>
+    <string name="sales_by_seller">Ventas por vendedor</string>
+    <string name="accounts_receivable">Cuentas por cobrar</string>
+    <string name="payroll_collections">Planilla de cobranzas</string>
+    <string name="customers">Clientes</string>
+    <string name="products">Productos</string>
+
+    <string name="sale_number_two_points">Pedido N°:</string>
+    <string name="voucher_type_two_points">Tipo de comprobante:</string>
+    <string name="customer_id">Código del cliente</string>
+    <string name="document_number">N° de documento</string>
+    <string name="document_type">Tipo de documento</string>
+    <string name="business_name">Razón social</string>
+    <string name="business_line">Giro del negocio</string>
+    <string name="paternal_surname">Apellido paterno</string>
+    <string name="maternal_surname">Apellido materno</string>
+    <string name="names">Nombre(s)</string>
+    <string name="address">Dirección</string>
+    <string name="reference">Referencia</string>
+    <string name="phone">Teléfono</string>
+    <string name="email">Correo electrónico</string>
+    <string name="emit_date">Fecha de emisión</string>
+    <string name="expiry_date">Fecha de vencimiento</string>
+    <string name="payment_condition">Condición de pago</string>
+    <string name="payment_method">Forma de pago</string>
+    <string name="payment_method_detail">Detalle de forma de pago</string>
+    <string name="vendor">Vendedor</string>
+    <string name="zone">Zona</string>
+    <string name="route">Ruta</string>
+    <string name="product_id">Código del producto</string>
+    <string name="calculator">Calculadora</string>
+    <string name="sale_value">Valor de venta</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="total">Total</string>
+    <string name="taxes">IGV</string>
+    <string name="send">Enviar</string>
+    <string name="exit">Salir</string>
+    <string name="description">Descripción</string>
+    <string name="measure_unit">Unidad de medida</string>
+    <string name="stock">Stock</string>
+    <string name="quantity">Cantidad</string>
+    <string name="selling_price">Precio de venta</string>
+    <string name="limit_price">Precio límite</string>
+    <string name="credit_price">Precio de crédito</string>
+    <string name="amount">Importe</string>
+    <string name="sale_date">Fecha de venta</string>
+    <string name="sales_value">Valor de ventas</string>
+    <string name="total_sales">Total de ventas</string>
+    <string name="balance">Saldo</string>
+    <string name="collection_sheet_date">Fecha de planilla</string>
+    <string name="total_collection_sheet">Total planilla</string>
+    <string name="quote_number">N° de cuota</string>
+    <string name="payment">Pago</string>
+    <string name="amortization_date">Fecha de amortización</string>
+    <string name="commission_percentage">Comisión (%)</string>
+    <string name="edit">Editar</string>
+    <string name="print">Imprimir</string>
+    <string name="preview">Vista previa</string>
+
+    <!-- Preference Titles -->
+    <string name="connection_header">Conectividad</string>
+    <string name="design_header">Diseño</string>
+    <string name="interface_header">Interfaz</string>
+    <string name="test_header">Pruebas</string>
+
+    <!-- Connection Preferences -->
+    <string name="server_title">Servidor</string>
+    <string name="port_title">Puerto</string>
+    <string name="application_title">Aplicación</string>
+
+    <!-- Design Preferences -->
+    <string name="skin_title">Tema</string>
+
+    <string name="skin_default_label">Por defecto</string>
+    <string name="skin_style_1_label">Sisdata Perú (Ventas)</string>
+    <string name="skin_style_2_label">Sisdata Perú (Distribuciones)</string>
+
+    <string name="skin_default_value">0</string>
+    <string name="skin_style_1_value">1</string>
+    <string name="skin_style_2_value">2</string>
+
+    <!-- Interface Preferences -->
+    <string name="autocomplete_title">Autocompletar búsqueda</string>
+
+    <!-- Test Preferences -->
+    <string name="depuration_title">Modo depuración</string>
+    <string name="beta_upgrades_title">Actualizaciones beta</string>
+    <string name="beta_upgrades_on">Permite todas las actualizaciones. (Pueden producirse errores)</string>
+    <string name="beta_upgrades_off">Permite solo actualizaciones estables</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

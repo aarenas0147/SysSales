@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_print_item"
+        android:orderInCategory="1"
+        android:title="@string/action_print"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_cancel_item"
+        android:orderInCategory="2"
+        android:title="@string/action_cancel_item"
+        app:showAsAction="never" />
+</menu>

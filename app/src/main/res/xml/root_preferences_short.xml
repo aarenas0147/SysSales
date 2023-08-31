@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        app:key="hostname"
+        app:title="@string/server_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <Design.IntEditTextPreference
+        app:key="port"
+        app:title="@string/port_title"
+        android:inputType="number"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        app:key="application"
+        app:title="@string/application_title"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

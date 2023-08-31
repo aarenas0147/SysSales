@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="skin_option_labels">
+        <item>@string/skin_default_label</item>
+        <item>@string/skin_style_1_label</item>
+        <item>@string/skin_style_2_label</item>
+    </array>
+
+    <array name="skin_option_values">
+        <item>@string/skin_default_value</item>
+        <item>@string/skin_style_1_value</item>
+        <item>@string/skin_style_2_value</item>
+    </array>
+</resources>
