@@ -45,6 +45,7 @@ import Connection.WebServices;
 import Data.MyDateTime;
 import Data.Objects.Configuration;
 import Data.Objects.ConstantData;
+import Data.Objects.CreditSale;
 import Data.Objects.Customer;
 import Data.Objects.PaymentCondition;
 import Data.Objects.PaymentMethod;
@@ -491,6 +492,15 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                         JSONObject jsonObject = new JSONObject(result.getResult().toString());
                         Person objPerson = Person.getItem(jsonObject);
                         newCustomer(objPerson);
+                    }
+                    else if (processId == WebMethods.TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER)
+                    {
+                        JSONArray jsonArray = new JSONArray(result.getResult().toString());
+                        List<CreditSale> list = CreditSale.getList(jsonArray);
+                        if (list != null && list.size() > 0)
+                        {
+                            Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
+                        }
                     }
                 }
                 else

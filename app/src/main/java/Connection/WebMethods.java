@@ -52,10 +52,11 @@ public class WebMethods {
     public static final int TYPE_LIST_SALE_DETAILS = 44;
     public static final int TYPE_TOTAL_AMOUNT_CREDIT_SALES = 45;
     public static final int TYPE_LIST_CREDIT_SALES = 46;
-    public static final int TYPE_LIST_CREDIT_SALE_QUOTES = 47;
-    public static final int TYPE_NEW_CREDIT_SALE_QUOTE = 48;
-    public static final int TYPE_SAVE_CREDIT_SALE_QUOTE = 49;
-    public static final int TYPE_DELETE_CREDIT_SALE_QUOTE = 50;
+    public static final int TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER = 47;
+    public static final int TYPE_LIST_CREDIT_SALE_QUOTES = 48;
+    public static final int TYPE_NEW_CREDIT_SALE_QUOTE = 49;
+    public static final int TYPE_SAVE_CREDIT_SALE_QUOTE = 50;
+    public static final int TYPE_DELETE_CREDIT_SALE_QUOTE = 51;
 
     //Variables:
     private Context context;
@@ -628,7 +629,7 @@ public class WebMethods {
         }
     }
 
-    public void getPresentations(Object id)
+    public void getPresentations(Object id, Object outletId)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -641,11 +642,12 @@ public class WebMethods {
                     TYPE_LIST_PRESENTATIONS);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("outletId", outletId);
             webServices.execute();
         }
     }
 
-    public void getStockByPresentation(Object presentationId)
+    public void getStockByPresentation(Object presentationId, Object outletId)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -658,6 +660,7 @@ public class WebMethods {
                     TYPE_GET_STOCK_BY_PRESENTATION);
 
             webServices.addParameter("presentationId", presentationId);
+            webServices.addParameter("outletId", outletId);
             webServices.execute();
         }
     }
@@ -944,6 +947,23 @@ public class WebMethods {
                     TYPE_LIST_CREDIT_SALE_QUOTES);
 
             webServices.addParameter("creditSaleId", creditSaleId);
+            webServices.execute();
+        }
+    }
+
+    public void getCreditSalesPendingByCustomer(Object customerId)
+    {
+        if (config != null && !config.getServer().equals(""))
+        {
+            final String methodName = "getCreditSalesPendingByCustomer";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "Customers.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER);
+
+            webServices.addParameter("customerId", customerId);
             webServices.execute();
         }
     }

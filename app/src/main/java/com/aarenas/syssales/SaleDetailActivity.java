@@ -57,6 +57,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
     //Parameters:
     Bundle parameters;
     int resultType;
+    User objUser;
     SaleDetail objSaleDetail = new SaleDetail();
 
     @Override
@@ -126,7 +127,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                 {
                     //etStock_SaleDetail.setText(MyMath.toRoundNumber(objPresentation.getTag().getStock()));
                     WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
-                    objWebMethods.getStockByPresentation(objPresentation.getId());
+                    objWebMethods.getStockByPresentation(objPresentation.getId(), objUser.getEmployee().getOutlet().getId());
 
                     etSellingPrice_SaleDetail.setText(MyMath.toDecimal(objPresentation.getPrice(), 2));
                     etLimitPrice_SaleDetail.setText(MyMath.toDecimal(objPresentation.getLimitPrice(), 2));
@@ -332,6 +333,10 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
             {
                 this.resultType = data.getInt(CONST_RESULT);
             }
+            if (data.get("user") != null)
+            {
+                this.objUser = data.getParcelable("user");
+            }
             if (data.get("sale") != null)
             {
                 Sale _sale = data.getParcelable("sale");
@@ -372,7 +377,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
             etCreditPrice_SaleDetail.setText(MyMath.toDecimal(objSaleDetail.getProduct().getCreditPrice(), 2));*/
 
             WebMethods objWebMethods = new WebMethods(this, this);
-            objWebMethods.getPresentations(objSaleDetail.getProduct().getId());
+            objWebMethods.getPresentations(objSaleDetail.getProduct().getId(), objUser.getEmployee().getOutlet().getId());
         }
     }
 
