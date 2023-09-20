@@ -381,8 +381,8 @@ public class CustomerActivity extends AppCompatActivity implements WebServices.O
             }
             else if (result.getResultCode().getId() == WebServices.Result.RESULT_ERROR)
             {
-                throw new Exception(result != null ?
-                        result.toString() :
+                throw new Exception(result.getResult() != null ?
+                        result.getResult().toString() :
                         getString(R.string.message_web_services_error));
             }
             else
