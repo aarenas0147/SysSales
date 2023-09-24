@@ -15,6 +15,7 @@ import java.util.List;
 
 import Connection.WebMethods;
 import Connection.WebServices;
+import Data.Objects.Company;
 import Data.Objects.Customer;
 import Data.Objects.Sale;
 import Data.Objects.SaleDetail;
@@ -25,12 +26,13 @@ import Design.SaleDetailsAdapter;
 public class SaleDetailsActivity extends AppCompatActivity implements WebServices.OnResult {
 
     //Controls:
-    GridView gvData_SaleDetailsActivity;
+    private GridView gvData_SaleDetailsActivity;
 
     //Parameters:
-    Bundle parameters;
-    User objUser;
-    Sale objSale;
+    private Bundle parameters;
+    private User objUser;
+    private Company objCompany;
+    private Sale objSale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
         gvData_SaleDetailsActivity = findViewById(R.id.gvData_SaleDetailsActivity);
 
         WebMethods objWebMethods = new WebMethods(this, this);
-        objWebMethods.getSaleDetailsBySale(objSale.getId());
+        objWebMethods.getSaleDetailsBySale(objSale.getId(), objCompany.getId());
     }
 
     @Override
@@ -96,6 +98,10 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
             if (data.get("user") != null)
             {
                 this.objUser = data.getParcelable("user");
+            }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
             }
             if (data.get("sale") != null)
             {

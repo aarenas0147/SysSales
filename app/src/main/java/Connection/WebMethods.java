@@ -88,55 +88,6 @@ public class WebMethods {
         }
     }
 
-    public void getNotifications()
-    {
-        if (config != null && !config.getServer().equals(""))
-        {
-            final String methodName = "getNotifications";
-
-            WebServices webServices = new WebServices(config.getNamespace(),
-                    String.format("http://%s/%s", config.getServer(), "Main.asmx"), methodName,
-                    String.format("%s%s", config.getNamespace(), methodName),
-                    this.context, this.listener,
-                    TYPE_LIST_NOTIFICATIONS);
-
-            webServices.execute();
-        }
-    }
-
-    public void getConfiguration()
-    {
-        if (config != null && !config.getServer().equals(""))
-        {
-            final String methodName = "getConfiguration";
-
-            WebServices webServices = new WebServices(config.getNamespace(),
-                    String.format("http://%s/%s", config.getServer(), "Main.asmx"), methodName,
-                    String.format("%s%s", config.getNamespace(), methodName),
-                    this.context, this.listener,
-                    TYPE_LIST_CONFIGURATIONS);
-
-            webServices.execute();
-        }
-    }
-
-    public void getConfigurationXUser(Object userId)
-    {
-        if (config != null && !config.getServer().equals(""))
-        {
-            final String methodName = "getConfigurationXUser";
-
-            WebServices webServices = new WebServices(config.getNamespace(),
-                    String.format("http://%s/%s", config.getServer(), "Main.asmx"), methodName,
-                    String.format("%s%s", config.getNamespace(), methodName),
-                    this.context, this.listener,
-                    TYPE_LIST_CONFIGURATIONS_X_USER);
-
-            webServices.addParameter("userId", userId);
-            webServices.execute();
-        }
-    }
-
     public void getCompany()
     {
         if (config != null && !config.getServer().equals(""))
@@ -153,7 +104,58 @@ public class WebMethods {
         }
     }
 
-    public void openSale(int personId, int userId)
+    public void getConfiguration(Object company)
+    {
+        if (config != null && !config.getServer().equals(""))
+        {
+            final String methodName = "getConfiguration";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "Main.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_LIST_CONFIGURATIONS);
+
+            webServices.addParameter("company", company);
+            webServices.execute();
+        }
+    }
+
+    public void getConfigurationXUser(Object company, Object userId)
+    {
+        if (config != null && !config.getServer().equals(""))
+        {
+            final String methodName = "getConfigurationXUser";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "Main.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_LIST_CONFIGURATIONS_X_USER);
+
+            webServices.addParameter("company", company);
+            webServices.addParameter("userId", userId);
+            webServices.execute();
+        }
+    }
+
+    public void getNotifications()
+    {
+        if (config != null && !config.getServer().equals(""))
+        {
+            final String methodName = "getNotifications";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "Main.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_LIST_NOTIFICATIONS);
+
+            webServices.execute();
+        }
+    }
+
+    public void openSale(int personId, int userId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -167,6 +169,7 @@ public class WebMethods {
 
             webServices.addParameter("personId", personId);
             webServices.addParameter("userId", userId);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
@@ -236,7 +239,7 @@ public class WebMethods {
         }
     }
 
-    public void getSalePaymentMethods(Object id)
+    public void getSalePaymentMethods(Object id, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -249,11 +252,12 @@ public class WebMethods {
                     TYPE_LIST_SALE_PAYMENT_METHODS);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void addSalePaymentMethod(Object id, Object paymentMethod, Object paymentMethodDetail, float amount)
+    public void addSalePaymentMethod(Object id, Object paymentMethod, Object paymentMethodDetail, Object company, float amount)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -268,12 +272,13 @@ public class WebMethods {
             webServices.addParameter("id", id);
             webServices.addParameter("paymentMethod", paymentMethod);
             webServices.addParameter("paymentMethodDetail", paymentMethodDetail);
+            webServices.addParameter("company", company);
             webServices.addParameter("amount", String.format("%s", amount));
             webServices.execute();
         }
     }
 
-    public void modifySalePaymentMethod(Object id, Object paymentMethod, Object paymentMethodDetail, float amount)
+    public void modifySalePaymentMethod(Object id, Object paymentMethod, Object paymentMethodDetail, Object company, float amount)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -288,12 +293,13 @@ public class WebMethods {
             webServices.addParameter("id", id);
             webServices.addParameter("paymentMethod", paymentMethod);
             webServices.addParameter("paymentMethodDetail", paymentMethodDetail);
+            webServices.addParameter("company", company);
             webServices.addParameter("amount", String.format("%s", amount));
             webServices.execute();
         }
     }
 
-    public void deleteSalePaymentMethod(Object id, Object paymentMethod)
+    public void deleteSalePaymentMethod(Object id, Object paymentMethod, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -307,11 +313,12 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("paymentMethod", paymentMethod);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void getTempSaleHeader(Object id)
+    public void getTempSaleHeader(Object id, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -324,11 +331,12 @@ public class WebMethods {
                     TYPE_LIST_TEMP_SALE_HEADER);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void getTempSaleDetails(Object id)
+    public void getTempSaleDetails(Object id, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -341,11 +349,13 @@ public class WebMethods {
                     TYPE_LIST_TEMP_SALE_DETAILS);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void addItem(Object id, Object productId, int personId, String voucherTypeId, Object paymentCondition, float quantity, float price)
+    public void addItem(Object id, Object productId, Object company,
+                        int personId, String voucherType, Object paymentCondition, float quantity, float price)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -358,9 +368,10 @@ public class WebMethods {
                     TYPE_ADD_ITEM_SALE);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.addParameter("productId", productId);
             webServices.addParameter("personId", personId);
-            webServices.addParameter("voucherTypeId", voucherTypeId);
+            webServices.addParameter("voucherType", voucherType);
             webServices.addParameter("paymentCondition", paymentCondition);
             webServices.addParameter("quantity", String.format("%s", quantity));
             webServices.addParameter("price", String.format("%s", price));
@@ -368,7 +379,7 @@ public class WebMethods {
         }
     }
 
-    public void modifyItem(Object id, Object productId, int personId, String voucherTypeId, Object paymentCondition,
+    public void modifyItem(Object id, Object productId, Object company, int personId, String voucherType, Object paymentCondition,
                            float quantity, float newQuantity,float price)
     {
         if (config != null && !config.getServer().equals(""))
@@ -383,8 +394,9 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("productId", productId);
+            webServices.addParameter("company", company);
             webServices.addParameter("personId", personId);
-            webServices.addParameter("voucherTypeId", voucherTypeId);
+            webServices.addParameter("voucherType", voucherType);
             webServices.addParameter("paymentCondition", paymentCondition);
             webServices.addParameter("quantity", String.format("%s", quantity));
             webServices.addParameter("newQuantity", String.format("%s", newQuantity));
@@ -393,7 +405,7 @@ public class WebMethods {
         }
     }
 
-    public void deleteItem(Object id, Object productId, String voucherTypeId, float quantity)
+    public void deleteItem(Object id, Object productId, String voucherType, float quantity)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -407,13 +419,14 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("productId", productId);
-            webServices.addParameter("voucherTypeId", voucherTypeId);
+            webServices.addParameter("voucherType", voucherType);
             webServices.addParameter("quantity", String.format("%s", quantity));
             webServices.execute();
         }
     }
 
-    public void saveSale(Object id, String voucherTypeId, Object paymentCondition, Object paymentMethod, String issueDate, String expirationDate,
+    public void saveSale(Object id, Object company, Object voucherType,
+                         Object paymentCondition, Object paymentMethod, String issueDate, String expirationDate,
                          String currentDateTime, String customerId, int personId, int userId)
     {
         if (config != null && !config.getServer().equals(""))
@@ -427,7 +440,8 @@ public class WebMethods {
                     TYPE_SAVE_SALE);
 
             webServices.addParameter("id", id);
-            webServices.addParameter("voucherTypeId", voucherTypeId);
+            webServices.addParameter("company", company);
+            webServices.addParameter("voucherType", voucherType);
             webServices.addParameter("paymentCondition", paymentCondition);
             webServices.addParameter("paymentMethod", paymentMethod);
             webServices.addParameter("issueDate", issueDate);
@@ -440,7 +454,7 @@ public class WebMethods {
         }
     }
 
-    public void cancelSale(Object id, Object vendorId)
+    public void cancelSale(Object id, Object vendorId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -454,11 +468,12 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("vendorId", vendorId);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void printSale(Object id, int userId)
+    public void printSale(Object id, int userId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -472,11 +487,12 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("userId", userId);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void printSaleInPDF(Object id)
+    public void printSaleInPDF(Object id, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -489,6 +505,7 @@ public class WebMethods {
                     TYPE_PRINT_SALE_IN_PDF);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
@@ -593,7 +610,7 @@ public class WebMethods {
         }
     }
 
-    public void getProductById(Object id, Object outletId)
+    public void getProductById(Object id, Object company, Object outletId)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -606,12 +623,13 @@ public class WebMethods {
                     TYPE_FIND_PRODUCT_BY_ID);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.addParameter("outletId", outletId);
             webServices.execute();
         }
     }
 
-    public void getProductsByDescription(String description, Object outletId)
+    public void getProductsByDescription(String description, Object company, Object outletId)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -624,12 +642,13 @@ public class WebMethods {
                     TYPE_LIST_PRODUCTS_BY_DESCRIPTION);
 
             webServices.addParameter("description", description);
+            webServices.addParameter("company", company);
             webServices.addParameter("outletId", outletId);
             webServices.execute();
         }
     }
 
-    public void getPresentations(Object id, Object outletId)
+    public void getPresentations(Object id, Object company, Object outletId)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -642,12 +661,13 @@ public class WebMethods {
                     TYPE_LIST_PRESENTATIONS);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.addParameter("outletId", outletId);
             webServices.execute();
         }
     }
 
-    public void getStockByPresentation(Object presentationId, Object outletId)
+    public void getStockByPresentation(Object presentationId, Object company, Object outletId)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -660,6 +680,7 @@ public class WebMethods {
                     TYPE_GET_STOCK_BY_PRESENTATION);
 
             webServices.addParameter("presentationId", presentationId);
+            webServices.addParameter("company", company);
             webServices.addParameter("outletId", outletId);
             webServices.execute();
         }
@@ -847,7 +868,7 @@ public class WebMethods {
         }
     }
 
-    public void getSalesByVendorHeader(String date, Object vendorId)
+    public void getSalesByVendorHeader(String date, Object vendorId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -861,11 +882,12 @@ public class WebMethods {
 
             webServices.addParameter("date", date);
             webServices.addParameter("vendorId", vendorId);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void getSalesByVendorDetails(String date, Object vendorId)
+    public void getSalesByVendorDetails(String date, Object vendorId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -879,11 +901,12 @@ public class WebMethods {
 
             webServices.addParameter("date", date);
             webServices.addParameter("vendorId", vendorId);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
 
-    public void getSaleDetailsBySale(Object id)
+    public void getSaleDetailsBySale(Object id, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -896,6 +919,7 @@ public class WebMethods {
                     TYPE_LIST_SALE_DETAILS);
 
             webServices.addParameter("id", id);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }

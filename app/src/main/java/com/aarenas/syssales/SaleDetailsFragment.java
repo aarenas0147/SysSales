@@ -36,6 +36,7 @@ import java.util.List;
 
 import Connection.WebMethods;
 import Connection.WebServices;
+import Data.Objects.Company;
 import Data.Objects.Product;
 import Data.Objects.Sale;
 import Data.Objects.SaleDetail;
@@ -71,14 +72,15 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
     }
 
     //Controls:
-    TextInputEditText etProductId_SaleDetailsFragment;
-    ImageButton btnFindProduct_SaleDetailsFragment, btnProducts_SaleDetailsFragment;
-    TextView tvItemsCount_SaleDetailsFragment;
-    GridView gvData_SaleDetailsFragment;
+    private TextInputEditText etProductId_SaleDetailsFragment;
+    private ImageButton btnFindProduct_SaleDetailsFragment, btnProducts_SaleDetailsFragment;
+    private TextView tvItemsCount_SaleDetailsFragment;
+    private GridView gvData_SaleDetailsFragment;
 
     //Parameters:
-    Bundle parameters;
-    User objUser;
+    private Bundle parameters;
+    private User objUser;
+    private Company objCompany;
     Sale objSale = new Sale();
 
     //Asynchronous data:
@@ -114,7 +116,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                         if (result.getResultCode() == Activity.RESULT_OK)
                         {
                             WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
-                            objWebMethods.getTempSaleDetails(objSale.getId());
+                            objWebMethods.getTempSaleDetails(objSale.getId(), objCompany.getId());
                         }
                     }
                 });
@@ -175,7 +177,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                 if (productId.length() == 6)
                 {
                     WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
-                    objWebMethods.getProductById(productId, objUser.getEmployee().getOutlet().getId());
+                    objWebMethods.getProductById(productId, objCompany.getId(), objUser.getEmployee().getOutlet().getId());
                 }
             }
         });
@@ -190,6 +192,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                 {
                     Intent intent = new Intent(getActivity(), ProductsActivity.class);
                     intent.putExtra("user", objUser);
+                    intent.putExtra("company", objCompany);
                     intent.putExtra("sale", objSale);
                     intent.putExtra(ProductsActivity.CONST_RESULT, ProductsActivity.RESULT_PICKER);
                     resultLauncher.launch(intent);
@@ -198,7 +201,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
         });
 
         WebMethods objWebMethods = new WebMethods(getActivity(), this);
-        objWebMethods.getTempSaleDetails(objSale.getId());
+        objWebMethods.getTempSaleDetails(objSale.getId(), objCompany.getId());
 
         return rootView;
     }
@@ -267,7 +270,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                                     R.string.message_changes_performed_successfully, Toast.LENGTH_SHORT).show();
 
                             WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
-                            objWebMethods.getTempSaleDetails(objSale.getId());
+                            objWebMethods.getTempSaleDetails(objSale.getId(), objCompany.getId());
                         }
                     }
                 }
@@ -323,6 +326,10 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
             {
                 this.objUser = data.getParcelable("user");
                 this.objSale.setEmployee(this.objUser.getEmployee());
+            }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
             }
             if (data.get("saleId") != null)
             {

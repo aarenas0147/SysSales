@@ -40,6 +40,7 @@ import Connection.WebServices;
 import Data.MyDateTime;
 import Data.MyMath;
 import Data.MyPdf;
+import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.Employee;
 import Data.Objects.Sale;
@@ -53,15 +54,16 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
     private ActivitySalesBinding binding;
 
     //Controls:
-    TextInputEditText etSaleDate_SalesActivity, etSalesValue_SalesActivity, etTotalSales_SalesActivity;
-    Spinner spVendor_SalesActivity;
-    TextView tvItemsCount_SalesActivity;
-    GridView gvData_SalesActivity;
+    private TextInputEditText etSaleDate_SalesActivity, etSalesValue_SalesActivity, etTotalSales_SalesActivity;
+    private Spinner spVendor_SalesActivity;
+    private TextView tvItemsCount_SalesActivity;
+    private GridView gvData_SalesActivity;
 
     //Parameters:
-    Bundle parameters;
-    Configuration objConfiguration, objConfiguration_user;
-    User objUser;
+    private Bundle parameters;
+    private Configuration objConfiguration, objConfiguration_user;
+    private User objUser;
+    private Company objCompany;
 
     //Variables:
     Calendar saleDate = Calendar.getInstance();
@@ -112,7 +114,7 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                         if (objEmployee != null)
                         {
                             WebMethods objWebMethods = new WebMethods(SalesActivity.this, SalesActivity.this);
-                            objWebMethods.getSalesByVendorHeader(date, objEmployee.getPerson().getId());
+                            objWebMethods.getSalesByVendorHeader(date, objEmployee.getPerson().getId(), objCompany.getId());
                         }
                     }
                 }, saleDate.get(Calendar.YEAR), saleDate.get(Calendar.MONTH), saleDate.get(Calendar.DAY_OF_MONTH));
@@ -130,7 +132,7 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                     if (objEmployee != null)
                     {
                         WebMethods objWebMethods = new WebMethods(SalesActivity.this, SalesActivity.this);
-                        objWebMethods.getSalesByVendorHeader(etSaleDate_SalesActivity.getText().toString(), objEmployee.getPerson().getId());
+                        objWebMethods.getSalesByVendorHeader(etSaleDate_SalesActivity.getText().toString(), objEmployee.getPerson().getId(), objCompany.getId());
                     }
                 }
             }
@@ -183,7 +185,7 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                                     break;
                                 case itemDelete:
                                     objWebMethods.cancelSale(objSale.getId(),
-                                            objSale.getEmployee().getPerson().getId());
+                                            objSale.getEmployee().getPerson().getId(), objCompany.getId());
                                     break;
                                 default:
                                     break;
@@ -254,7 +256,7 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
 
                                 WebMethods objWebMethods = new WebMethods(this, this);
                                 objWebMethods.getSalesByVendorDetails(etSaleDate_SalesActivity.getText().toString(),
-                                        objSale.getEmployee().getPerson().getId());
+                                        objSale.getEmployee().getPerson().getId(), objCompany.getId());
                             }
                         }
                     }
@@ -383,6 +385,14 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
     {
         if (data != null)
         {
+            if (data.get("user") != null)
+            {
+                this.objUser = data.getParcelable("user");
+            }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
             if (data.get("configuration") != null)
             {
                 this.objConfiguration = data.getParcelable("configuration");
@@ -390,10 +400,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
             if (data.get("configuration_user") != null)
             {
                 this.objConfiguration_user = data.getParcelable("configuration_user");
-            }
-            if (data.get("user") != null)
-            {
-                this.objUser = data.getParcelable("user");
             }
         }
     }
@@ -438,10 +444,10 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
         builder.setMessage(R.string.message_print)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     //objConfiguration != null && objConfiguration.isOptionPrintSalePdf()
-                    objWebMethods.printSale(objSale.getId(), objUser.getId());
+                    objWebMethods.printSale(objSale.getId(), objUser.getId(), objCompany.getId());
                 })
                 .setNeutralButton(R.string.preview, (dialog, id) -> {
-                    objWebMethods.printSaleInPDF(objSale.getId());
+                    objWebMethods.printSaleInPDF(objSale.getId(), objCompany.getId());
                 })
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
 

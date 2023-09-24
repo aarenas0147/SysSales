@@ -28,6 +28,7 @@ import Connection.WebServices;
 import Data.MyDateTime;
 import Data.MyMath;
 import Data.MyPdf;
+import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.Sale;
 import Data.Objects.User;
@@ -59,14 +60,15 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
     }
 
     //Controls:
-    Button btnCalculator_SaleSummaryFragment, btnSend_SaleSummaryFragment, btnExit_SaleSummaryFragment;
-    TextInputEditText etSaleValue_SaleSummaryFragment, etSubtotal_SaleSummaryFragment,
+    private Button btnCalculator_SaleSummaryFragment, btnSend_SaleSummaryFragment, btnExit_SaleSummaryFragment;
+    private TextInputEditText etSaleValue_SaleSummaryFragment, etSubtotal_SaleSummaryFragment,
             etTaxes_SaleSummaryFragment, etTotal_SaleSummaryFragment;
 
     //Parameters:
-    Bundle parameters;
-    Configuration objConfiguration;
-    User objUser;
+    private Bundle parameters;
+    private Configuration objConfiguration;
+    private User objUser;
+    private Company objCompany;
     Sale objSale = new Sale();
 
     @Override
@@ -103,9 +105,9 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
             public void onClick(View view) {
                 if (isDataCompleted())
                 {
-                    String s = String.format("Id: %s; Document: %s; Condition: %s; PaymentMethod: %s; " +
+                    String s = String.format("Id: %s; Company: %s; Document: %s; Condition: %s; PaymentMethod: %s; " +
                                     "EmitDate: %s; ExpiryDate: %s; CurrentDate: %s; Customer: %s; Person: %s; User: %s",
-                            objSale.getId(), objSale.getVoucherType().getId(),
+                            objSale.getId(), objCompany.getId(), objSale.getVoucherType().getId(),
                             objSale.getPaymentCondition().getId(), objSale.getPaymentMethod().getId(),
                             MyDateTime.format(objSale.getIssueDate(), MyDateTime.TYPE_DATE),
                             MyDateTime.format(objSale.getExpirationDate(), MyDateTime.TYPE_DATE),
@@ -114,7 +116,7 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
                     Log.e("save_sale_data", s);
 
                     WebMethods objWebMethods = new WebMethods(getActivity(), SaleSummaryFragment.this);
-                    objWebMethods.saveSale(objSale.getId(), (String) objSale.getVoucherType().getId(),
+                    objWebMethods.saveSale(objSale.getId(), objCompany.getId(), objSale.getVoucherType().getId(),
                             objSale.getPaymentCondition().getId(), objSale.getPaymentMethod().getId(),
                             MyDateTime.format(objSale.getIssueDate(), MyDateTime.TYPE_DATE),
                             MyDateTime.format(objSale.getExpirationDate(), MyDateTime.TYPE_DATE),
@@ -250,13 +252,17 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
     {
         if (data != null)
         {
-            if (data.get("configuration") != null)
-            {
-                this.objConfiguration = data.getParcelable("configuration");
-            }
             if (data.get("user") != null)
             {
                 this.objUser = data.getParcelable("user");
+            }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
+            if (data.get("configuration") != null)
+            {
+                this.objConfiguration = data.getParcelable("configuration");
             }
             if (data.get("saleId") != null)
             {
@@ -366,10 +372,10 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
         builder.setMessage(R.string.message_print)
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     //objConfiguration != null && objConfiguration.isOptionPrintSalePdf()
-                    objWebMethods.printSale(objSale.getId(), objUser.getId());
+                    objWebMethods.printSale(objSale.getId(), objUser.getId(), objCompany.getId());
                 })
                 .setNeutralButton(R.string.preview, (dialog, id) -> {
-                    objWebMethods.printSaleInPDF(objSale.getId());
+                    objWebMethods.printSaleInPDF(objSale.getId(), objCompany.getId());
                 })
                 .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                     //Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();

@@ -26,6 +26,7 @@ import java.util.List;
 import Connection.WebMethods;
 import Connection.WebServices;
 import Data.MyMath;
+import Data.Objects.Company;
 import Data.Objects.PaymentMethod;
 import Data.Objects.PaymentMethodDetail;
 import Data.Objects.Product;
@@ -37,16 +38,17 @@ import Design.SpinnerAdapter;
 public class SalePaymentMethodActivity extends AppCompatActivity implements WebServices.OnResult {
 
     //Controls:
-    TextInputEditText etAmount_PaymentMethodBySale, etCommissionPercentage_PaymentMethodBySale,
+    private TextInputEditText etAmount_PaymentMethodBySale, etCommissionPercentage_PaymentMethodBySale,
             etTotal_PaymentMethodBySale;
-    Spinner spPaymentMethodDetail_PaymentMethodBySale;
-    LinearLayout lytPaymentMethodDetail_PaymentMethodBySale;
-    Button btnAccept_PaymentMethodBySale;
+    private Spinner spPaymentMethodDetail_PaymentMethodBySale;
+    private LinearLayout lytPaymentMethodDetail_PaymentMethodBySale;
+    private Button btnAccept_PaymentMethodBySale;
 
     //Parameters:
-    Bundle parameters;
+    private Bundle parameters;
+    private Company objCompany;
+    private SalePaymentMethod objSalePaymentMethod;
     Sale objSale = new Sale();
-    SalePaymentMethod objSalePaymentMethod;
     float balance;
 
     @Override
@@ -115,14 +117,14 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
                                 objWebMethods.addSalePaymentMethod(objSale.getId(),
                                         objSalePaymentMethod.getPaymentMethod().getId(),
                                         objPaymentMethodDetail != null ? objPaymentMethodDetail.getId() : null,
-                                        amount);
+                                        objCompany.getId(), amount);
                             }
                             else
                             {
                                 objWebMethods.modifySalePaymentMethod(objSale.getId(),
                                         objSalePaymentMethod.getPaymentMethod().getId(),
                                         objPaymentMethodDetail != null ? objPaymentMethodDetail.getId() : null,
-                                        amount);
+                                        objCompany.getId(), amount);
                             }
                         }
                         else
@@ -227,6 +229,10 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
     {
         if (data != null)
         {
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
             if (data.get("sale") != null)
             {
                 Sale _sale = data.getParcelable("sale");

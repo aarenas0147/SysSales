@@ -35,6 +35,7 @@ import java.util.List;
 import Connection.WebMethods;
 import Connection.WebServices;
 import Data.MyMath;
+import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.SalePaymentMethod;
 import Data.Objects.Sale;
@@ -46,12 +47,13 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
     private ActivitySalePaymentMethodsBinding binding;
 
     //Controls:
-    TextInputEditText etTotal_PaymentMethodsBySale, etBalance_PaymentMethodsBySale;
-    GridView gvData_PaymentMethodsBySale;
+    private TextInputEditText etTotal_PaymentMethodsBySale, etBalance_PaymentMethodsBySale;
+    private GridView gvData_PaymentMethodsBySale;
 
     //Parameters:
-    Bundle parameters;
-    Configuration objConfiguration;
+    private Bundle parameters;
+    private Company objCompany;
+    private Configuration objConfiguration;
     Sale objSale = new Sale();
 
     //Variables:
@@ -92,7 +94,7 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
                         if (result.getResultCode() == Activity.RESULT_OK)
                         {
                             WebMethods objWebMethods = new WebMethods(SalePaymentMethodsActivity.this, SalePaymentMethodsActivity.this);
-                            objWebMethods.getSalePaymentMethods(objSale.getId());
+                            objWebMethods.getSalePaymentMethods(objSale.getId(), objCompany.getId());
                         }
                     }
                 });
@@ -136,7 +138,7 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
                                     case itemDelete:
                                         WebMethods objWebMethods = new WebMethods(SalePaymentMethodsActivity.this, SalePaymentMethodsActivity.this);
                                         objWebMethods.deleteSalePaymentMethod(objSale.getId(),
-                                                objSalePaymentMethod.getPaymentMethod().getId());
+                                                objSalePaymentMethod.getPaymentMethod().getId(), objCompany.getId());
                                         break;
                                     default:
                                         break;
@@ -154,8 +156,8 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
         });
 
         WebMethods objWebMethods = new WebMethods(this, this);
-        objWebMethods.getTempSaleHeader(objSale.getId());
-        objWebMethods.getSalePaymentMethods(objSale.getId());
+        objWebMethods.getTempSaleHeader(objSale.getId(), objCompany.getId());
+        objWebMethods.getSalePaymentMethods(objSale.getId(), objCompany.getId());
     }
 
     @Override
@@ -217,7 +219,7 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
                             Toast.makeText(getApplicationContext(), R.string.message_changes_performed_successfully, Toast.LENGTH_SHORT).show();
 
                             WebMethods objWebMethods = new WebMethods(SalePaymentMethodsActivity.this, SalePaymentMethodsActivity.this);
-                            objWebMethods.getSalePaymentMethods(objSale.getId());
+                            objWebMethods.getSalePaymentMethods(objSale.getId(), objCompany.getId());
                         }
                     }
                 }
@@ -257,6 +259,10 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
     {
         if (data != null)
         {
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
             if (data.get("configuration") != null)
             {
                 this.objConfiguration = data.getParcelable("configuration");

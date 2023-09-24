@@ -36,6 +36,7 @@ import Connection.DirectConnection;
 import Connection.WebConfig;
 import Connection.WebMethods;
 import Connection.WebServices;
+import Data.Objects.Company;
 import Data.Objects.User;
 import Data.Utilities;
 
@@ -52,11 +53,13 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
 
     //Asynchronous data:
     private User objUser;
+    private Company objCompany;
 
     //Variables:
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private ActivityResultLauncher<Intent> resultLauncher;
+    private WebMethods objWebMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
         btnLogin_Login = findViewById(R.id.btnLogin_Login);
         tvAppVersion_Login = findViewById(R.id.tvAppVersion_Login);
 
+        objWebMethods = new WebMethods(this, this);
         imgLogo_Login.setImageResource(R.drawable.icon);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
@@ -171,13 +175,7 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
                                         objUser.getEmployee() != null &&
                                         objUser.getEmployee().getPerson() != null)
                                 {
-                                    Toast.makeText(getApplicationContext(),
-                                            String.format("Bienvenido: %s", objUser.getEmployee().getPerson().getNames()),
-                                            Toast.LENGTH_SHORT).show();
-
-                                    Intent activity = new Intent(getApplicationContext(), MainActivity.class);
-                                    outputParameters(activity);
-                                    startActivity(activity);
+                                    objWebMethods.getCompany();
                                 }
                             }
                             else
@@ -193,6 +191,22 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
                                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                                 }
                             }
+                        }
+                    }
+                    else if (processId == WebMethods.TYPE_LIST_PRINCIPAL_COMPANY)
+                    {
+                        JSONObject jsonObject = new JSONObject(result.getResult().toString());
+                        objCompany = Company.getItem(jsonObject);
+
+                        if (objCompany != null)
+                        {
+                            Toast.makeText(getApplicationContext(),
+                                    String.format("Bienvenido: %s", objUser.getEmployee().getPerson().getNames()),
+                                    Toast.LENGTH_SHORT).show();
+
+                            Intent activity = new Intent(getApplicationContext(), MainActivity.class);
+                            outputParameters(activity);
+                            startActivity(activity);
                         }
                     }
                 }
@@ -251,6 +265,7 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
     private void outputParameters(Intent intent)
     {
         intent.putExtra("user", objUser);
+        intent.putExtra("company", objCompany);
     }
 
     private void checkUpdates()
@@ -294,7 +309,6 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
             WebConfig config = new WebConfig(getApplicationContext());
             if (!config.getHostname().equals(""))
             {
-                WebMethods objWebMethods = new WebMethods(this, this);
                 objWebMethods.findUser(etUsername_Login.getText().toString(), etPassword_Login.getText().toString());
             }
             else

@@ -32,6 +32,7 @@ import java.util.List;
 
 import Connection.WebMethods;
 import Connection.WebServices;
+import Data.Objects.Company;
 import Data.Objects.Product;
 import Data.Objects.Sale;
 import Data.Objects.User;
@@ -49,13 +50,14 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
     private ActivityProductsBinding binding;
 
     //Controls:
-    GridView gvData_Products;
-    SearchView searchView;
+    private GridView gvData_Products;
+    private SearchView searchView;
 
     //Parameters:
-    Bundle parameters;
+    private Bundle parameters;
+    private User objUser;
+    private Company objCompany;
     int resultType;
-    User objUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,7 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
                 if (query != null && query.trim().length() > 0)
                 {
                     WebMethods objWebMethods = new WebMethods(ProductsActivity.this, ProductsActivity.this);
-                    objWebMethods.getProductsByDescription(query, objUser.getEmployee().getOutlet().getId());
+                    objWebMethods.getProductsByDescription(query, objCompany.getId(), objUser.getEmployee().getOutlet().getId());
 
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean autocomplete_search = preferences.getBoolean("autocomplete_search", false);
@@ -171,7 +173,7 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
                 if (searchView.getQuery().length() == 0)
                 {
                     WebMethods objWebMethods = new WebMethods(ProductsActivity.this, ProductsActivity.this);
-                    objWebMethods.getProductsByDescription("", objUser.getEmployee().getOutlet().getId());
+                    objWebMethods.getProductsByDescription("", objCompany.getId(), objUser.getEmployee().getOutlet().getId());
 
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean autocomplete_search = preferences.getBoolean("autocomplete_search", false);
@@ -203,7 +205,7 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
         if (searchView.getQuery() == null || searchView.getQuery().length() == 0)
         {
             WebMethods objWebMethods = new WebMethods(this, this);
-            objWebMethods.getProductsByDescription("", objUser.getEmployee().getOutlet().getId());
+            objWebMethods.getProductsByDescription("", objCompany.getId(), objUser.getEmployee().getOutlet().getId());
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -273,6 +275,10 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
             if (data.get("user") != null)
             {
                 this.objUser = data.getParcelable("user");
+            }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
             }
         }
     }

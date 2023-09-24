@@ -43,6 +43,7 @@ import java.util.List;
 import Connection.WebMethods;
 import Connection.WebServices;
 import Data.MyDateTime;
+import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.ConstantData;
 import Data.Objects.CreditSale;
@@ -86,19 +87,20 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     }
 
     //Controls:
-    TextView tvOrderId_SaleDataFragment;
-    TextInputEditText etCustomerId_SaleDataFragment, etCustomerDocumentNumber_SaleDataFragment,
+    private TextView tvOrderId_SaleDataFragment;
+    private TextInputEditText etCustomerId_SaleDataFragment, etCustomerDocumentNumber_SaleDataFragment,
             etCustomerBusinessName_SaleDataFragment, etCustomerAddress_SaleDataFragment,
             etIssueDate_SaleDataFragment, etExpiryDate_SaleDataFragment,
             etSeller_SaleDataFragment, etSellerZone_SaleDataFragment, etSellerRoute_SaleDataFragment;
-    Spinner spVoucherType_SaleDataFragment, spPaymentCondition_SaleDataFragment, spPaymentMethod_SaleDataFragment;
-    ImageButton btnFindCustomer_SaleDataFragment, btnCustomers_SaleDataFragment, btnSalePaymentMethods_SaleDataFragment;
-    LinearLayout lytVendorByCustomer_SaleDataFragment;
+    private Spinner spVoucherType_SaleDataFragment, spPaymentCondition_SaleDataFragment, spPaymentMethod_SaleDataFragment;
+    private ImageButton btnFindCustomer_SaleDataFragment, btnCustomers_SaleDataFragment, btnSalePaymentMethods_SaleDataFragment;
+    private LinearLayout lytVendorByCustomer_SaleDataFragment;
 
     //Parameters:
-    Bundle parameters;
-    Configuration objConfiguration;
-    User objUser;
+    private Bundle parameters;
+    private Configuration objConfiguration;
+    private User objUser;
+    private Company objCompany;
     Sale objSale = new Sale();
 
     //Activities result:
@@ -631,13 +633,17 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     {
         if (data != null)
         {
-            if (data.get("configuration") != null)
-            {
-                this.objConfiguration = data.getParcelable("configuration");
-            }
             if (data.get("user") != null)
             {
                 this.objUser = data.getParcelable("user");
+            }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
+            if (data.get("configuration") != null)
+            {
+                this.objConfiguration = data.getParcelable("configuration");
             }
             if (data.get("saleId") != null)
             {

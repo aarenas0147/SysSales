@@ -30,6 +30,7 @@ import java.util.List;
 import Connection.WebMethods;
 import Connection.WebServices;
 import Data.MyMath;
+import Data.Objects.Company;
 import Data.Objects.Product;
 import Data.Objects.Sale;
 import Data.Objects.SaleDetail;
@@ -55,9 +56,10 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
     Button btnAccept_SaleDetail;
 
     //Parameters:
-    Bundle parameters;
     int resultType;
-    User objUser;
+    private Bundle parameters;
+    private User objUser;
+    private Company objCompany;
     SaleDetail objSaleDetail = new SaleDetail();
 
     @Override
@@ -127,7 +129,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                 {
                     //etStock_SaleDetail.setText(MyMath.toRoundNumber(objPresentation.getTag().getStock()));
                     WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
-                    objWebMethods.getStockByPresentation(objPresentation.getId(), objUser.getEmployee().getOutlet().getId());
+                    objWebMethods.getStockByPresentation(objPresentation.getId(), objCompany.getId(), objUser.getEmployee().getOutlet().getId());
 
                     etSellingPrice_SaleDetail.setText(MyMath.toDecimal(objPresentation.getPrice(), 2));
                     etLimitPrice_SaleDetail.setText(MyMath.toDecimal(objPresentation.getLimitPrice(), 2));
@@ -174,6 +176,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                                 WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
                                 objWebMethods.addItem(objSaleDetail.getSale().getId(),
                                         objPresentation.getId(),
+                                        objCompany.getId(),
                                         (int)objSaleDetail.getSale().getEmployee().getPerson().getId(),
                                         (String)objSaleDetail.getSale().getVoucherType().getId(),
                                         objSaleDetail.getSale().getPaymentCondition().getId(), quantity, sellingPrice);
@@ -183,6 +186,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                                 WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
                                 objWebMethods.modifyItem(objSaleDetail.getSale().getId(),
                                         objPresentation.getId(),
+                                        objCompany.getId(),
                                         (int)objSaleDetail.getSale().getEmployee().getPerson().getId(),
                                         (String)objSaleDetail.getSale().getVoucherType().getId(),
                                         objSaleDetail.getSale().getPaymentCondition().getId(), objSaleDetail.getQuantity(), quantity, sellingPrice);
@@ -337,6 +341,10 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
             {
                 this.objUser = data.getParcelable("user");
             }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
             if (data.get("sale") != null)
             {
                 Sale _sale = data.getParcelable("sale");
@@ -377,7 +385,7 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
             etCreditPrice_SaleDetail.setText(MyMath.toDecimal(objSaleDetail.getProduct().getCreditPrice(), 2));*/
 
             WebMethods objWebMethods = new WebMethods(this, this);
-            objWebMethods.getPresentations(objSaleDetail.getProduct().getId(), objUser.getEmployee().getOutlet().getId());
+            objWebMethods.getPresentations(objSaleDetail.getProduct().getId(), objCompany.getId(), objUser.getEmployee().getOutlet().getId());
         }
     }
 

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
             public void onClick(View view) {
                 if (objConfigurationXUser != null && objConfigurationXUser.isOptionNewSale())
                 {
-                    objWebMethods.openSale((int)objUser.getEmployee().getPerson().getId(), objUser.getId());
+                    objWebMethods.openSale((int)objUser.getEmployee().getPerson().getId(), objUser.getId(), objCompany.getId());
                 }
                 else
                 {
@@ -156,9 +156,8 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
 
         Load();
 
-        objWebMethods.getConfiguration();
-        objWebMethods.getConfigurationXUser(objUser.getEmployee().getPerson().getId());
-        objWebMethods.getCompany();
+        objWebMethods.getConfiguration(objCompany.getId());
+        objWebMethods.getConfigurationXUser(objCompany.getId(), objUser.getEmployee().getPerson().getId());
     }
 
     @Override
@@ -290,6 +289,10 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
             {
                 this.objUser = data.getParcelable("user");
             }
+            if (data.get("company") != null)
+            {
+                this.objCompany = data.getParcelable("company");
+            }
         }
     }
 
@@ -307,6 +310,9 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
         {
             tvUsername_Main.setText(String.format("Usuario: %s", objUser.getEmployee().getPerson().getNames()));
             tvOutlet_Main.setText(String.format("Punto de venta: %s", objUser.getEmployee().getOutlet().getDescription()));
+        }
+        if (objCompany != null) {
+            tvCompanyName_Main.setText(objCompany.getCommercialName());
         }
     }
 
