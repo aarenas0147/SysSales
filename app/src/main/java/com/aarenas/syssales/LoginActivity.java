@@ -253,8 +253,8 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
             editor = null;
         }*/
 
-        boolean rememberMe = preferences.getBoolean("remember_me", false);
-        if (rememberMe)
+        boolean isRememberMe = preferences.getBoolean("remember_me", false);
+        if (isRememberMe)
         {
             etUsername_Login.setText(preferences.getString("username", ""));
             etPassword_Login.setText(preferences.getString("password", ""));
@@ -286,24 +286,22 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
         if (Objects.requireNonNull(etUsername_Login.getText()).length() > 0 &&
          Objects.requireNonNull(etPassword_Login.getText()).length() > 0)
         {
+            editor = preferences.edit();
             if (chkRememberMe_Login.isChecked())
             {
-                editor = preferences.edit();
                 editor.putBoolean("remember_me", true);
                 editor.putString("username", etUsername_Login.getText().toString());
                 editor.putString("password", etPassword_Login.getText().toString());
                 editor.apply();
-                editor = null;
             }
             else
             {
-                editor = preferences.edit();
                 editor.remove("remember_me");
                 editor.remove("username");
                 editor.remove("password");
                 editor.apply();
-                editor = null;
             }
+            editor = null;
 
             //Ingresar:
             WebConfig config = new WebConfig(getApplicationContext());
