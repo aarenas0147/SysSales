@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
         {
             if (result.getResultCode().getId() == WebServices.Result.RESULT_OK)
             {
-                if (result != null && !WebServices.isNull(result))
+                if (!WebServices.isNull(result))
                 {
                     if (processId == WebMethods.TYPE_LIST_CONFIGURATIONS)
                     {
