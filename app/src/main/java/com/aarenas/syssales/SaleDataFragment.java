@@ -277,6 +277,17 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         spPaymentCondition_SaleDataFragment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                SimpleClass<PaymentCondition> objPaymentCondition = (SimpleClass<PaymentCondition>)adapterView.getItemAtPosition(i);
+
+                if (objPaymentCondition != null)
+                {
+                    etExpiryDate_SaleDataFragment.setEnabled(objPaymentCondition.getTag().isDueDaysEditable());
+
+                    Calendar _issueDate = (Calendar) issueDate.clone();
+                    _issueDate.add(Calendar.DAY_OF_YEAR, objPaymentCondition.getTag().getDueDays() != null ? objPaymentCondition.getTag().getDueDays() : 0);
+                    setExpiryDate(_issueDate.get(Calendar.DAY_OF_MONTH), _issueDate.get(Calendar.MONTH), _issueDate.get(Calendar.YEAR));
+                }
+
                 InteractionFragment();
             }
 
@@ -293,7 +304,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
                 if (objConfiguration != null && objConfiguration.isOptionCustomPaymentMethod())
                 {
-                    if (objPaymentMethod.getId().equals("PERSONALIZADO"))
+                    if (objPaymentMethod != null && objPaymentMethod.getId().equals("PERSONALIZADO"))
                     {
                         //Falta validar si el monto de venta es mayor a cero
                         Intent intent = new Intent(getActivity(), SalePaymentMethodsActivity.class);

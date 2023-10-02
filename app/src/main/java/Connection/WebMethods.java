@@ -427,7 +427,7 @@ public class WebMethods {
 
     public void saveSale(Object id, Object company, Object voucherType,
                          Object paymentCondition, Object paymentMethod, String issueDate, String expirationDate,
-                         String currentDateTime, String customerId, int personId, int userId)
+                         String currentDateTime, Object customerId, int personId, int userId)
     {
         if (config != null && !config.getServer().equals(""))
         {

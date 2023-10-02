@@ -121,7 +121,7 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
                             MyDateTime.format(objSale.getIssueDate(), MyDateTime.TYPE_DATE),
                             MyDateTime.format(objSale.getExpirationDate(), MyDateTime.TYPE_DATE),
                             MyDateTime.format(MyDateTime.toLocalTimeZone(MyDateTime.getCurrentDatetime()), MyDateTime.TYPE_DATETIME),
-                            (String)objSale.getClient().getId(), (int)objUser.getEmployee().getPerson().getId(), objUser.getId());
+                            objSale.getClient().getId(), (int)objUser.getEmployee().getPerson().getId(), objUser.getId());
                 }
                 else
                 {

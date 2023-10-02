@@ -13,7 +13,8 @@ public class PaymentCondition implements Parcelable {
 
     private Object Id;
     private String Description;
-    private boolean Enabled;
+    private Integer DueDays;
+    private boolean DueDaysEditable, Enabled;
 
     public PaymentCondition() {
     }
@@ -21,6 +22,8 @@ public class PaymentCondition implements Parcelable {
     protected PaymentCondition(Parcel in) {
         Id = in.readValue(getClass().getClassLoader());
         Description = in.readString();
+        DueDays = in.readByte() != 0 ? in.readInt() : null;
+        DueDaysEditable = in.readByte() != 0;
         Enabled = in.readByte() != 0;
     }
 
@@ -52,6 +55,22 @@ public class PaymentCondition implements Parcelable {
         Description = description;
     }
 
+    public Integer getDueDays() {
+        return DueDays;
+    }
+
+    public void setDueDays(Integer dueDays) {
+        DueDays = dueDays;
+    }
+
+    public boolean isDueDaysEditable() {
+        return DueDaysEditable;
+    }
+
+    public void setDueDaysEditable(boolean dueDaysEditable) {
+        DueDaysEditable = dueDaysEditable;
+    }
+
     public boolean isEnabled() {
         return Enabled;
     }
@@ -69,6 +88,8 @@ public class PaymentCondition implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeValue(Id);
         parcel.writeString(Description);
+        parcel.writeValue(DueDays);
+        parcel.writeByte((byte) (DueDaysEditable ? 1 : 0));
         parcel.writeByte((byte) (Enabled ? 1 : 0));
     }
 
@@ -80,6 +101,8 @@ public class PaymentCondition implements Parcelable {
 
             objPaymentCondition.setId(result.get("Id") != JSONObject.NULL ? result.get("Id") : null);
             objPaymentCondition.setDescription(result.get("Description") != JSONObject.NULL ? result.getString("Description") : null);
+            objPaymentCondition.setDueDays(result.get("DueDays") != JSONObject.NULL ? result.getInt("DueDays") : null);
+            objPaymentCondition.setDueDaysEditable(result.get("DueDaysEditable") != JSONObject.NULL && result.getBoolean("DueDaysEditable"));
             objPaymentCondition.setEnabled(result.get("Enabled") != JSONObject.NULL && result.getBoolean("Enabled"));
 
             return objPaymentCondition;
