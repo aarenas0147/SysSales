@@ -3,6 +3,8 @@ package Data.Objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,7 +24,11 @@ public class PaymentCondition implements Parcelable {
     protected PaymentCondition(Parcel in) {
         Id = in.readValue(getClass().getClassLoader());
         Description = in.readString();
-        DueDays = in.readByte() != 0 ? in.readInt() : null;
+        if (in.readByte() == 0) {
+            DueDays = null;
+        } else {
+            DueDays = in.readInt();
+        }
         DueDaysEditable = in.readByte() != 0;
         Enabled = in.readByte() != 0;
     }
@@ -85,12 +91,17 @@ public class PaymentCondition implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeValue(Id);
-        parcel.writeString(Description);
-        parcel.writeValue(DueDays);
-        parcel.writeByte((byte) (DueDaysEditable ? 1 : 0));
-        parcel.writeByte((byte) (Enabled ? 1 : 0));
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeValue(Id);
+        dest.writeString(Description);
+        if (DueDays == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(DueDays);
+        }
+        dest.writeByte((byte) (DueDaysEditable ? 1 : 0));
+        dest.writeByte((byte) (Enabled ? 1 : 0));
     }
 
     public static PaymentCondition getItem(JSONObject result)

@@ -143,6 +143,8 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                             {
                                 case itemEdit:
                                     Intent intent = new Intent(getActivity().getApplicationContext(), SaleDetailActivity.class);
+                                    intent.putExtra("user", objUser);
+                                    intent.putExtra("company", objCompany);
                                     intent.putExtra("sale", objSale);
                                     intent.putExtra("product", objSaleDetail.getProduct());
                                     intent.putExtra("quantity", objSaleDetail.getQuantity());
@@ -252,6 +254,8 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                             if (objSale != null && objSale.getEmployee() != null && objSale.getVoucherType() != null)
                             {
                                 Intent intent = new Intent(getActivity().getApplicationContext(), SaleDetailActivity.class);
+                                intent.putExtra("user", objUser);
+                                intent.putExtra("company", objCompany);
                                 intent.putExtra("sale", objSale);
                                 intent.putExtra("product", objProduct);
                                 intent.putExtra(SaleDetailActivity.CONST_RESULT, SaleDetailActivity.RESULT_ADD);
