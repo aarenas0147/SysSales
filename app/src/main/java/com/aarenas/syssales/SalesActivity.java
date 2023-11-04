@@ -151,6 +151,7 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                 if (objSale != null)
                 {
                     Intent activity = new Intent(getApplicationContext(), SaleDetailsActivity.class);
+                    activity.putExtras(parameters);
                     activity.putExtra("sale", objSale);
                     startActivity(activity);
                 }
