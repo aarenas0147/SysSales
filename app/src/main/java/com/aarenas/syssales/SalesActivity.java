@@ -66,6 +66,7 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
     private Company objCompany;
 
     //Variables:
+    WebMethods objWebMethods;
     Calendar saleDate = Calendar.getInstance();
 
     @Override
@@ -74,6 +75,8 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
 
         parameters = getIntent().getExtras();
         LoadParameters(parameters);
+
+        objWebMethods = new WebMethods(this, this);
 
         binding = ActivitySalesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -113,7 +116,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                         Employee objEmployee = (Employee)((SimpleClass<?>)spVendor_SalesActivity.getSelectedItem()).getTag();
                         if (objEmployee != null)
                         {
-                            WebMethods objWebMethods = new WebMethods(SalesActivity.this, SalesActivity.this);
                             objWebMethods.getSalesByVendorHeader(date, objEmployee.getPerson().getId(), objCompany.getId());
                         }
                     }
@@ -131,7 +133,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                     Employee objEmployee = (Employee)((SimpleClass<?>)spVendor_SalesActivity.getSelectedItem()).getTag();
                     if (objEmployee != null)
                     {
-                        WebMethods objWebMethods = new WebMethods(SalesActivity.this, SalesActivity.this);
                         objWebMethods.getSalesByVendorHeader(etSaleDate_SalesActivity.getText().toString(), objEmployee.getPerson().getId(), objCompany.getId());
                     }
                 }
@@ -175,7 +176,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
                             final int itemPrint = R.id.action_print_item;
                             final int itemDelete = R.id.action_cancel_item;
 
-                            WebMethods objWebMethods = new WebMethods(SalesActivity.this, SalesActivity.this);
                             switch (menuItem.getItemId())
                             {
                                 case itemPrint:
@@ -202,7 +202,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
             }
         });
 
-        WebMethods objWebMethods = new WebMethods(this, this);
         objWebMethods.getVendors();
 
         Load();
@@ -251,7 +250,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
 
                             if (objSale.getEmployee() != null)
                             {
-                                WebMethods objWebMethods = new WebMethods(this, this);
                                 objWebMethods.getSalesByVendorDetails(etSaleDate_SalesActivity.getText().toString(),
                                         objSale.getEmployee().getPerson().getId(), objCompany.getId());
                             }
@@ -434,8 +432,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
 
     private void print(Sale objSale)
     {
-        WebMethods objWebMethods = new WebMethods(SalesActivity.this, SalesActivity.this);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name);
         builder.setMessage(R.string.message_print)
