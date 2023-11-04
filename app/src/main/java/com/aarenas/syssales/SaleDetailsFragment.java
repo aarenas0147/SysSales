@@ -44,11 +44,6 @@ import Data.Objects.User;
 import Data.Utilities;
 import Design.SaleDetailsAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SaleDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SaleDetailsFragment extends Fragment implements WebServices.OnResult {
 
     private OnFragmentInteractionListener mListener;
@@ -57,14 +52,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param params Parameter 1.
-     * @return A new instance of fragment SaleDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SaleDetailsFragment newInstance(Bundle params) {
         SaleDetailsFragment fragment = new SaleDetailsFragment();
         fragment.setArguments(params);
@@ -87,6 +74,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
     List<SaleDetail> list;
 
     //Variables:
+    WebMethods objWebMethods;
     ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
@@ -95,6 +83,8 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
 
         parameters = getArguments();
         LoadParameters(parameters);
+
+        objWebMethods = new WebMethods(getActivity(), this);
     }
 
     @Override
@@ -115,7 +105,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK)
                         {
-                            WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
                             objWebMethods.getTempSaleDetails(objSale.getId(), objCompany.getId());
                         }
                     }
@@ -152,7 +141,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                                     resultLauncher.launch(intent);
                                     break;
                                 case itemDelete:
-                                    WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
                                     objWebMethods.deleteItem(objSale.getId(), objSaleDetail.getProduct().getDecimalUnit(),
                                             (String)objSale.getVoucherType().getId(), objSaleDetail.getQuantity());
                                     break;
@@ -178,7 +166,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                 String productId = etProductId_SaleDetailsFragment.getText().toString();
                 if (productId.length() == 6)
                 {
-                    WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
                     objWebMethods.getProductById(productId, objCompany.getId(), objUser.getEmployee().getOutlet().getId());
                 }
             }
@@ -202,7 +189,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
             }
         });
 
-        WebMethods objWebMethods = new WebMethods(getActivity(), this);
         objWebMethods.getTempSaleDetails(objSale.getId(), objCompany.getId());
 
         return rootView;
@@ -273,7 +259,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                             Toast.makeText(getActivity().getApplicationContext(),
                                     R.string.message_changes_performed_successfully, Toast.LENGTH_SHORT).show();
 
-                            WebMethods objWebMethods = new WebMethods(getActivity(), SaleDetailsFragment.this);
                             objWebMethods.getTempSaleDetails(objSale.getId(), objCompany.getId());
                         }
                     }
