@@ -34,25 +34,12 @@ import Data.Objects.Sale;
 import Data.Objects.User;
 import Data.Utilities;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SaleSummaryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SaleSummaryFragment extends Fragment implements WebServices.OnResult {
 
     public SaleSummaryFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param params Parameter 1.
-     * @return A new instance of fragment SaleSummaryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SaleSummaryFragment newInstance(Bundle params) {
         SaleSummaryFragment fragment = new SaleSummaryFragment();
         fragment.setArguments(params);
@@ -71,12 +58,17 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
     private Company objCompany;
     Sale objSale = new Sale();
 
+    //Variables:
+    private WebMethods objWebMethods;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         parameters = getArguments();
         LoadParameters(parameters);
+
+        objWebMethods = new WebMethods(getActivity(), SaleSummaryFragment.this);
     }
 
     @Override
@@ -105,17 +97,6 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
             public void onClick(View view) {
                 if (isDataCompleted())
                 {
-                    String s = String.format("Id: %s; Company: %s; Document: %s; Condition: %s; PaymentMethod: %s; " +
-                                    "EmitDate: %s; ExpiryDate: %s; CurrentDate: %s; Customer: %s; Person: %s; User: %s",
-                            objSale.getId(), objCompany.getId(), objSale.getVoucherType().getId(),
-                            objSale.getPaymentCondition().getId(), objSale.getPaymentMethod().getId(),
-                            MyDateTime.format(objSale.getIssueDate(), MyDateTime.TYPE_DATE),
-                            MyDateTime.format(objSale.getExpirationDate(), MyDateTime.TYPE_DATE),
-                            MyDateTime.format(MyDateTime.toLocalTimeZone(MyDateTime.getCurrentDatetime()), MyDateTime.TYPE_DATETIME),
-                            objSale.getClient().getId(), objUser.getEmployee().getPerson().getId(), objUser.getId());
-                    Log.e("save_sale_data", s);
-
-                    WebMethods objWebMethods = new WebMethods(getActivity(), SaleSummaryFragment.this);
                     objWebMethods.saveSale(objSale.getId(), objCompany.getId(), objSale.getVoucherType().getId(),
                             objSale.getPaymentCondition().getId(), objSale.getPaymentMethod().getId(),
                             MyDateTime.format(objSale.getIssueDate(), MyDateTime.TYPE_DATE),
@@ -365,8 +346,6 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
 
     private void print()
     {
-        WebMethods objWebMethods = new WebMethods(getActivity(), SaleSummaryFragment.this);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.app_name);
         builder.setMessage(R.string.message_print)
