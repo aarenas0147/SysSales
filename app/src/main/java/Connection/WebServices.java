@@ -1,5 +1,6 @@
 package Connection;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -29,7 +30,8 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
     private SoapObject REQUEST;     //Parámetro(s) del WebService
     private String METHOD_NAME;
 
-    private Context CONTEXT;
+    @SuppressLint("StaticFieldLeak")
+    private final Context CONTEXT;
     private OnResult CALLBACK;
     private int PROCESS_ID;
 
@@ -181,6 +183,7 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
         public final static int RESULT_OFFLINE = 0;
         public final static int RESULT_OK = 1;
         public final static int RESULT_CANCELED = -2;
+
         protected Object Result;            //Resultado del WebService
         protected ResultCode ResultCode;    //Condición del WebService (Ok, KO, NO)
 
