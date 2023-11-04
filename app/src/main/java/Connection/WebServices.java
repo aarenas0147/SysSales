@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 
+import Data.Utilities;
+
 /**
  * Created by Alan Arenas on 20/04/2022.
  */
@@ -25,6 +27,7 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
     private String URL;
     private String SOAP_ACTION;     //Información del WebService
     private SoapObject REQUEST;     //Parámetro(s) del WebService
+    private String METHOD_NAME;
 
     private Context CONTEXT;
     private OnResult CALLBACK;
@@ -44,6 +47,7 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
         this.URL = url;
         this.SOAP_ACTION = soapAction;
 
+        this.METHOD_NAME = methodName;
         this.REQUEST = new SoapObject(namespace, methodName);
 
         this.RESULT = new Result();
@@ -81,6 +85,8 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
 
         try
         {
+            printLog();
+
             transportSE.call(this.SOAP_ACTION, envelope);
             //transportSE.getServiceConnection().disconnect();
             this.RESULT.setResult(envelope.getResponse());
@@ -146,6 +152,22 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
         this.CALLBACK.processFinish(this.RESULT, this.PROCESS_ID);
     }
 
+    private void printLog() {
+        StringBuilder values = new StringBuilder();
+        if (this.REQUEST.getPropertyCount() > 0) {
+            for (int i = 0; i < this.REQUEST.getPropertyCount(); i++) {
+                values.append(String.format("%s: %s%s",
+                        this.REQUEST.getPropertyInfo(i).getName(),
+                        this.REQUEST.getPropertyInfo(i).getValue(),
+                        (i < this.REQUEST.getPropertyCount() - 1 ? "; " : "")));
+            }
+        } else {
+            values.append("Sin parámetros");
+        }
+
+        Log.i(Utilities.setTag(this.METHOD_NAME), values.toString());
+    }
+
     public interface OnResult {
 
         //void processFinish(Object result, int processId, int idResult);
@@ -180,6 +202,7 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
     }
 
     public class ResultCode {
+
         protected int Id;
         protected ErrorResult ErrorResult;
 

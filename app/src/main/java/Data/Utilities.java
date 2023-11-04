@@ -115,4 +115,12 @@ public class Utilities {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
+
+    public static String setTag(String tag)
+    {
+        if (tag.length() > 23) {
+            tag = tag.substring(0, 23);
+        }
+        return tag;
+    }
 }
