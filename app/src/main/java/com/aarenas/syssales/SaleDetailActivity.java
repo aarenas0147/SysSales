@@ -62,6 +62,9 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
     private Company objCompany;
     SaleDetail objSaleDetail = new SaleDetail();
 
+    //Variables:
+    private WebMethods objWebMethods;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,8 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
 
         parameters = getIntent().getExtras();
         LoadParameters(parameters);
+
+        objWebMethods = new WebMethods(this, this);
 
         etProductId_SaleDetail = findViewById(R.id.etProductId_SaleDetail);
         etDescription_SaleDetail = findViewById(R.id.etDescription_SaleDetail);
@@ -128,7 +133,6 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                 if (objPresentation != null)
                 {
                     //etStock_SaleDetail.setText(MyMath.toRoundNumber(objPresentation.getTag().getStock()));
-                    WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
                     objWebMethods.getStockByPresentation(objPresentation.getId(), objCompany.getId(), objUser.getEmployee().getOutlet().getId());
 
                     etSellingPrice_SaleDetail.setText(MyMath.toDecimal(objPresentation.getPrice(), 2));
@@ -162,18 +166,8 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                     {
                         if(sellingPrice >= objPresentation.getLimitPrice())
                         {
-                            String s = String.format("Id: %s; Product: %s; Employee: %s; Document: %s; " +
-                                            "Condition: %s; Quantity: %s; Price: %s",
-                                    objSaleDetail.getSale().getId(),
-                                    objPresentation.getId(),
-                                    objSaleDetail.getSale().getEmployee().getPerson().getId(),
-                                    objSaleDetail.getSale().getVoucherType().getId(),
-                                    objSaleDetail.getSale().getPaymentCondition(), quantity, sellingPrice);
-                            Log.e("item_data", s);
-
                             if (resultType == RESULT_ADD)
                             {
-                                WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
                                 objWebMethods.addItem(objSaleDetail.getSale().getId(),
                                         objPresentation.getId(),
                                         objCompany.getId(),
@@ -183,7 +177,6 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
                             }
                             else if (resultType == RESULT_MODIFY)
                             {
-                                WebMethods objWebMethods = new WebMethods(SaleDetailActivity.this, SaleDetailActivity.this);
                                 objWebMethods.modifyItem(objSaleDetail.getSale().getId(),
                                         objPresentation.getId(),
                                         objCompany.getId(),
@@ -384,8 +377,8 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
             etLimitPrice_SaleDetail.setText(MyMath.toDecimal(objSaleDetail.getProduct().getLimitPrice(), 2));
             etCreditPrice_SaleDetail.setText(MyMath.toDecimal(objSaleDetail.getProduct().getCreditPrice(), 2));*/
 
-            WebMethods objWebMethods = new WebMethods(this, this);
-            objWebMethods.getPresentations(objSaleDetail.getProduct().getId(), objCompany.getId(), objUser.getEmployee().getOutlet().getId());
+            objWebMethods.getPresentations(objSaleDetail.getProduct().getId(), objCompany.getId(),
+                    objUser.getEmployee().getOutlet().getId());
         }
     }
 

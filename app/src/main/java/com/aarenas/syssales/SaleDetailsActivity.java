@@ -34,6 +34,9 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
     private Company objCompany;
     private Sale objSale;
 
+    //Variables:
+    private WebMethods objWebMethods;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +45,10 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
         parameters = getIntent().getExtras();
         LoadParameters(parameters);
 
+        objWebMethods = new WebMethods(this, this);
+
         gvData_SaleDetailsActivity = findViewById(R.id.gvData_SaleDetailsActivity);
 
-        WebMethods objWebMethods = new WebMethods(this, this);
         objWebMethods.getSaleDetailsBySale(objSale.getId(), objCompany.getId());
     }
 

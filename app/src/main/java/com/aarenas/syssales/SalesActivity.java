@@ -251,10 +251,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
 
                             if (objSale.getEmployee() != null)
                             {
-                                Log.e("sale_header", String.format("Date: %s; Vendor: %s",
-                                        etSaleDate_SalesActivity.getText().toString(),
-                                        objSale.getEmployee().getPerson().getId()));
-
                                 WebMethods objWebMethods = new WebMethods(this, this);
                                 objWebMethods.getSalesByVendorDetails(etSaleDate_SalesActivity.getText().toString(),
                                         objSale.getEmployee().getPerson().getId(), objCompany.getId());
