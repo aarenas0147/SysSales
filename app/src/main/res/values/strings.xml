@@ -41,7 +41,8 @@
     <string name="message_not_exist_and_create_customer">¡Cliente no encontrado! ¿Desea crearlo?</string>
     <string name="message_print">¿Desea imprimir la venta?</string>
     <string name="message_customer_disabled">¡El cliente se encuentra deshabilitado!</string>
-    <string name="message_customer_delinqued">¡El cliente presenta deudas!</string>
+    <string name="message_customer_delinqued">¡El cliente tiene deudas pendientes!</string>
+    <string name="message_customer_delinqued_no_credit">¡El cliente tiene deudas pendientes y no se le puede vender a crédito!</string>
     <string name="message_customer_not_belong_seller">¡Cliente no pertenece al vendedor!</string>
 
     <string name="action_settings">Ajustes</string>
