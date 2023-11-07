@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import Data.MyDateTime;
@@ -12,9 +11,8 @@ import Data.MyDateTime;
 public class CollectionSheetDetail {
 
     private CollectionSheet CollectionSheet;
-    private Object SaleId;
+    private Sale Sale;
     private java.util.Date Date;
-    private Customer Customer;
     private Float Amount, Amortization, Balance;
 
     public Data.Objects.CollectionSheet getCollectionSheet() {
@@ -25,12 +23,12 @@ public class CollectionSheetDetail {
         CollectionSheet = collectionSheet;
     }
 
-    public Object getSaleId() {
-        return SaleId;
+    public Sale getSale() {
+        return Sale;
     }
 
-    public void setSaleId(Object saleId) {
-        SaleId = saleId;
+    public void setSale(Sale sale) {
+        Sale = sale;
     }
 
     public java.util.Date getDate() {
@@ -39,14 +37,6 @@ public class CollectionSheetDetail {
 
     public void setDate(java.util.Date date) {
         Date = date;
-    }
-
-    public Data.Objects.Customer getCustomer() {
-        return Customer;
-    }
-
-    public void setCustomer(Data.Objects.Customer customer) {
-        Customer = customer;
     }
 
     public Float getAmount() {
@@ -81,10 +71,9 @@ public class CollectionSheetDetail {
 
             objCollectionSheetDetail.setCollectionSheet(result.get("CollectionSheet") != JSONObject.NULL
                     ? Data.Objects.CollectionSheet.getItem(new JSONObject(result.get("CollectionSheet").toString())) : null);
-            objCollectionSheetDetail.setSaleId(result.get("SaleId") != JSONObject.NULL ? result.get("SaleId") : null);
+            objCollectionSheetDetail.setSale(result.get("Sale") != JSONObject.NULL
+                    ? Data.Objects.Sale.getItem(new JSONObject(result.get("Sale").toString())) : null);
             objCollectionSheetDetail.setDate(result.get("Date") != JSONObject.NULL ? MyDateTime.parseNet(result.get("Date").toString()) : null);
-            objCollectionSheetDetail.setCustomer(result.get("Customer") != JSONObject.NULL
-                    ? Data.Objects.Customer.getItem(new JSONObject(result.get("Customer").toString())) : null);
             objCollectionSheetDetail.setAmount(result.get("Amount") != JSONObject.NULL ? Float.parseFloat(result.get("Amount").toString()) : null);
             objCollectionSheetDetail.setAmortization(result.get("Amortization") != JSONObject.NULL ? Float.parseFloat(result.get("Amortization").toString()) : null);
             objCollectionSheetDetail.setBalance(result.get("Balance") != JSONObject.NULL ? Float.parseFloat(result.get("Balance").toString()) : null);

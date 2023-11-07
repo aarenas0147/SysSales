@@ -62,8 +62,8 @@ public class CollectionSheetAdapter extends BaseAdapter {
         tvCondition_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvCondition_CollectionSheetAdapter);
 
         tvId_CollectionSheetAdapter.setText(String.format("ID: %s", list.get(position).getCollectionSheet().getId()));
-        tvSaleId_CollectionSheetAdapter.setText(String.format("N° Pedido: %s", list.get(position).getSaleId()));
-        tvBusinessName_CollectionSheetAdapter.setText(String.format("Razón social: %s", list.get(position).getCustomer().getPerson().getBusinessName()));
+        tvSaleId_CollectionSheetAdapter.setText(String.format("N° Pedido: %s", list.get(position).getSale().getId()));
+        tvBusinessName_CollectionSheetAdapter.setText(String.format("Razón social: %s", list.get(position).getSale().getClient().getPerson().getBusinessName()));
         tvBalance_CollectionSheetAdapter.setText(String.format("Saldo: S/.%s", MyMath.toDecimal(list.get(position).getBalance(), 2)));
         tvAmortization_CollectionSheetAdapter.setText(String.format("Amortización: S/.%s", MyMath.toDecimal(list.get(position).getAmortization(), 2)));
         tvCondition_CollectionSheetAdapter.setText(String.format("Condición: %s", list.get(position).getBalance() == 0.0F ? "CANCELADO" : "ADEUDA"));
