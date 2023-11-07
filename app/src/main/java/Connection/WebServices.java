@@ -88,7 +88,6 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
         try
         {
             printLog();
-
             transportSE.call(this.SOAP_ACTION, envelope);
             //transportSE.getServiceConnection().disconnect();
             this.RESULT.setResult(envelope.getResponse());
@@ -167,7 +166,12 @@ public class WebServices extends AsyncTask<Void, Integer, Void> {
             values.append("Sin parámetros");
         }
 
-        Log.i(Utilities.setTag(this.METHOD_NAME), values.toString());
+        String tag = this.METHOD_NAME;
+        if (tag.length() > 23) {
+            tag = tag.substring(0, 23);
+        }
+
+        Log.i(tag, values.toString());
     }
 
     public interface OnResult {

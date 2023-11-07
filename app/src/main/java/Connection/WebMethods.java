@@ -1,6 +1,10 @@
 package Connection;
 
 import android.content.Context;
+import android.util.Log;
+
+import Data.Utilities;
+import okhttp3.internal.Util;
 
 public class WebMethods {
 
@@ -14,49 +18,51 @@ public class WebMethods {
     public static final int TYPE_LIST_VOUCHER_TYPES = 7;
     public static final int TYPE_LIST_PAYMENT_CONDITIONS = 8;
     public static final int TYPE_LIST_PAYMENT_METHODS = 9;
-    public static final int TYPE_LIST_PAYMENT_METHOD_DETAILS = 51;
-    public static final int TYPE_LIST_SALE_PAYMENT_METHODS = 10;
-    public static final int TYPE_ADD_PAYMENT_METHOD_BY_SALE = 11;
-    public static final int TYPE_MODIFY_PAYMENT_METHOD_BY_SALE = 12;
-    public static final int TYPE_DELETE_PAYMENT_METHOD_BY_SALE = 13;
-    public static final int TYPE_LIST_TEMP_SALE_HEADER = 14;
-    public static final int TYPE_LIST_TEMP_SALE_DETAILS = 15;
-    public static final int TYPE_ADD_ITEM_SALE = 16;
-    public static final int TYPE_MODIFY_ITEM_SALE = 17;
-    public static final int TYPE_DELETE_ITEM_SALE = 18;
-    public static final int TYPE_SAVE_SALE = 19;
-    public static final int TYPE_CANCEL_SALE = 20;
-    public static final int TYPE_PRINT_SALE = 21;
-    public static final int TYPE_PRINT_SALE_IN_PDF = 22;
-    public static final int TYPE_FIND_CUSTOMER_BY_ID = 23;
-    public static final int TYPE_LIST_CUSTOMERS = 24;
-    public static final int TYPE_LIST_CUSTOMERS_BY_BUSINESS_NAME = 25;
-    public static final int TYPE_LIST_CUSTOMERS_BY_VENDOR = 26;
-    public static final int TYPE_GET_CUSTOMER_DEFAULT = 27;
-    public static final int TYPE_FIND_PERSON_ONLINE = 28;
-    public static final int TYPE_FIND_PRODUCT_BY_ID = 29;
-    public static final int TYPE_LIST_PRODUCTS_BY_DESCRIPTION = 30;
-    public static final int TYPE_LIST_PRESENTATIONS = 31;
-    public static final int TYPE_GET_STOCK_BY_PRESENTATION = 32;
-    public static final int TYPE_NEW_CUSTOMER = 33;
-    public static final int TYPE_LIST_BUSINESS_LINE = 34;
-    public static final int TYPE_LIST_ZONES = 35;
-    public static final int TYPE_LIST_ROUTES_BY_ZONE = 36;
-    public static final int TYPE_FIND_VENDOR_BY_ROUTE = 37;
-    public static final int TYPE_INSERT_CUSTOMER = 38;
-    public static final int TYPE_MODIFY_CUSTOMER = 39;
-    public static final int TYPE_LIST_COLLECTION_SHEET = 40;
-    public static final int TYPE_LIST_VENDORS = 41;
-    public static final int TYPE_LIST_SALES_BY_VENDOR_HEADER = 42;
-    public static final int TYPE_LIST_SALES_BY_VENDOR_DETAILS = 43;
-    public static final int TYPE_LIST_SALE_DETAILS = 44;
-    public static final int TYPE_TOTAL_AMOUNT_CREDIT_SALES = 45;
-    public static final int TYPE_LIST_CREDIT_SALES = 46;
-    public static final int TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER = 47;
-    public static final int TYPE_LIST_CREDIT_SALE_QUOTES = 48;
-    public static final int TYPE_NEW_CREDIT_SALE_QUOTE = 49;
-    public static final int TYPE_SAVE_CREDIT_SALE_QUOTE = 50;
-    public static final int TYPE_DELETE_CREDIT_SALE_QUOTE = 51;
+    public static final int TYPE_VALIDATE_PAYMENT_METHOD = 10;
+    public static final int TYPE_LIST_PAYMENT_METHOD_DETAILS = 11;
+    public static final int TYPE_LIST_SALE_PAYMENT_METHODS = 12;
+    public static final int TYPE_ADD_PAYMENT_METHOD_BY_SALE = 13;
+    public static final int TYPE_MODIFY_PAYMENT_METHOD_BY_SALE = 14;
+    public static final int TYPE_DELETE_PAYMENT_METHOD_BY_SALE = 15;
+    public static final int TYPE_LIST_TEMP_SALE_HEADER = 16;
+    public static final int TYPE_LIST_TEMP_SALE_DETAILS = 17;
+    public static final int TYPE_ADD_ITEM_SALE = 18;
+    public static final int TYPE_MODIFY_ITEM_SALE = 19;
+    public static final int TYPE_DELETE_ITEM_SALE = 20;
+    public static final int TYPE_SAVE_SALE = 21;
+    public static final int TYPE_CANCEL_SALE = 22;
+    public static final int TYPE_PRINT_SALE = 23;
+    public static final int TYPE_PRINT_SALE_IN_PDF = 24;
+    public static final int TYPE_FIND_CUSTOMER_BY_ID = 25;
+    public static final int TYPE_LIST_CUSTOMERS = 26;
+    public static final int TYPE_LIST_CUSTOMERS_BY_BUSINESS_NAME = 27;
+    public static final int TYPE_LIST_CUSTOMERS_BY_VENDOR = 28;
+    public static final int TYPE_GET_CUSTOMER_DEFAULT = 29;
+    public static final int TYPE_FIND_PERSON_ONLINE = 30;
+    public static final int TYPE_FIND_PRODUCT_BY_ID = 31;
+    public static final int TYPE_LIST_PRODUCTS_BY_DESCRIPTION = 32;
+    public static final int TYPE_LIST_PRESENTATIONS = 33;
+    public static final int TYPE_GET_STOCK_BY_PRESENTATION = 34;
+    public static final int TYPE_NEW_CUSTOMER = 35;
+    public static final int TYPE_LIST_BUSINESS_LINE = 36;
+    public static final int TYPE_LIST_ZONES = 37;
+    public static final int TYPE_LIST_ROUTES_BY_ZONE = 38;
+    public static final int TYPE_FIND_VENDOR_BY_ROUTE = 39;
+    public static final int TYPE_INSERT_CUSTOMER = 40;
+    public static final int TYPE_MODIFY_CUSTOMER = 41;
+    public static final int TYPE_LIST_COLLECTION_SHEET = 42;
+    public static final int TYPE_LIST_VENDORS = 43;
+    public static final int TYPE_LIST_SALES_BY_VENDOR_HEADER = 44;
+    public static final int TYPE_LIST_SALES_BY_VENDOR_DETAILS = 45;
+    public static final int TYPE_LIST_SALE_DETAILS = 46;
+    public static final int TYPE_TOTAL_AMOUNT_CREDIT_SALES = 47;
+    public static final int TYPE_LIST_CREDIT_SALES = 48;
+    public static final int TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER = 49;
+    public static final int TYPE_LIST_CREDIT_LINE_BY_CUSTOMER = 50;
+    public static final int TYPE_LIST_CREDIT_SALE_QUOTES = 51;
+    public static final int TYPE_NEW_CREDIT_SALE_QUOTE = 52;
+    public static final int TYPE_SAVE_CREDIT_SALE_QUOTE = 53;
+    public static final int TYPE_DELETE_CREDIT_SALE_QUOTE = 54;
 
     //Variables:
     private Context context;
@@ -218,6 +224,24 @@ public class WebMethods {
                     this.context, this.listener,
                     TYPE_LIST_PAYMENT_METHODS);
 
+            webServices.execute();
+        }
+    }
+
+    public void validatePaymentCondition(Object id, Object customerId)
+    {
+        if (config != null && !config.getServer().equals(""))
+        {
+            final String methodName = "validatePaymentCondition";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "NewSale.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_VALIDATE_PAYMENT_METHOD);
+
+            webServices.addParameter("id", id);
+            webServices.addParameter("customerId", customerId);
             webServices.execute();
         }
     }
@@ -610,7 +634,7 @@ public class WebMethods {
         }
     }
 
-    public void getProductById(Object id, Object company, Object outletId)
+    public void getProductById(Object id, Object company, Object outlet)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -624,12 +648,12 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("company", company);
-            webServices.addParameter("outletId", outletId);
+            webServices.addParameter("outlet", outlet);
             webServices.execute();
         }
     }
 
-    public void getProductsByDescription(String description, Object company, Object outletId)
+    public void getProductsByDescription(String description, Object company, Object outlet)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -643,12 +667,12 @@ public class WebMethods {
 
             webServices.addParameter("description", description);
             webServices.addParameter("company", company);
-            webServices.addParameter("outletId", outletId);
+            webServices.addParameter("outlet", outlet);
             webServices.execute();
         }
     }
 
-    public void getPresentations(Object id, Object company, Object outletId)
+    public void getPresentations(Object id, Object company, Object outlet)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -662,12 +686,12 @@ public class WebMethods {
 
             webServices.addParameter("id", id);
             webServices.addParameter("company", company);
-            webServices.addParameter("outletId", outletId);
+            webServices.addParameter("outlet", outlet);
             webServices.execute();
         }
     }
 
-    public void getStockByPresentation(Object presentationId, Object company, Object outletId)
+    public void getStockByPresentation(Object presentationId, Object company, Object outlet)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -681,7 +705,7 @@ public class WebMethods {
 
             webServices.addParameter("presentationId", presentationId);
             webServices.addParameter("company", company);
-            webServices.addParameter("outletId", outletId);
+            webServices.addParameter("outlet", outlet);
             webServices.execute();
         }
     }
@@ -975,7 +999,7 @@ public class WebMethods {
         }
     }
 
-    public void getCreditSalesPendingByCustomer(Object customerId)
+    public void getCreditSalesPendingByCustomer(Object customerId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
@@ -986,6 +1010,24 @@ public class WebMethods {
                     String.format("%s%s", config.getNamespace(), methodName),
                     this.context, this.listener,
                     TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER);
+
+            webServices.addParameter("customerId", customerId);
+            webServices.addParameter("company", company);
+            webServices.execute();
+        }
+    }
+
+    public void getCreditLineByCustomer(Object customerId)
+    {
+        if (config != null && !config.getServer().equals(""))
+        {
+            final String methodName = "getCreditLineByCustomer";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "NewSale.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_LIST_CREDIT_LINE_BY_CUSTOMER);
 
             webServices.addParameter("customerId", customerId);
             webServices.execute();
