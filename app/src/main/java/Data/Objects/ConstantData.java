@@ -3,6 +3,8 @@ package Data.Objects;
 public class ConstantData {
 
     public static class CustomerStatus {
+        /** No se ha definido el estado del cliente */
+        public static final int UNDEFINED = 0;
         /** El cliente se encuentra en plena actividad y relación con la empresa. Realiza transacciones, compras o utiliza los servicios de manera regular y continua. */
         public static final int ACTIVE = 1;
         /** El cliente no ha realizado transacciones, compras o utilizado servicios en un período significativo. La relación activa con la empresa se ha detenido. */
