@@ -46,6 +46,7 @@ import Data.MyDateTime;
 import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.ConstantData;
+import Data.Objects.CreditLine;
 import Data.Objects.CreditSale;
 import Data.Objects.Customer;
 import Data.Objects.PaymentCondition;
@@ -101,7 +102,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     private Configuration objConfiguration;
     private User objUser;
     private Company objCompany;
-    Sale objSale = new Sale();
+    private Sale objSale = new Sale();
 
     //Activities result:
     ActivityResultLauncher<Intent> resultLauncherCustomerAdd;
@@ -109,9 +110,11 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     //Asynctask:
     //List<PaymentMethod> listPaymentMethod;
 
-    Calendar issueDate = Calendar.getInstance();
-    Calendar expiryDate = Calendar.getInstance();
-    float balance = 0F;
+    //Variables:
+    private WebMethods objWebMethods;
+    private Calendar issueDate = Calendar.getInstance();
+    private Calendar expiryDate = Calendar.getInstance();
+    private float balance = 0F;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +122,8 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
         parameters = getArguments();
         LoadParameters(parameters);
+
+        objWebMethods = new WebMethods(getActivity(), SaleDataFragment.this);
     }
 
     @Override
@@ -206,23 +211,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     }
                 });
 
-        /*etCustomerId_SaleDataFragment.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
-
         etIssueDate_SaleDataFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -289,6 +277,12 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                 }
 
                 InteractionFragment();
+
+                /*if (objCustomer != null && objCustomer.getStatus() == ConstantData.CustomerStatus.DELINQUENT)
+                {
+                    objWebMethods.getCreditLineByCustomer(objCustomer.getId());
+                    //Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
+                }*/
             }
 
             @Override
@@ -338,7 +332,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
                 if (customerId.length() > 0)
                 {
-                    WebMethods objWebMethods = new WebMethods(getActivity(), SaleDataFragment.this);
                     objWebMethods.getCustomerById(customerId);
                 }
                 else
@@ -515,6 +508,15 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                             Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
                         }
                     }
+                    else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_CUSTOMER)
+                    {
+                        /*JSONArray jsonArray = new JSONArray(result.getResult().toString());
+                        List<CreditLine> list = CreditLine.getList(jsonArray);
+                        if (list != null && list.size() > 0)
+                        {
+
+                        }*/
+                    }
                 }
                 else
                 {
@@ -529,7 +531,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                                         public void onClick(DialogInterface dialog, int id) {
                                             String customerId = etCustomerId_SaleDataFragment.getText().toString();
 
-                                            WebMethods objWebMethods = new WebMethods(getActivity(), SaleDataFragment.this);
                                             objWebMethods.findPersonOnlineByDocumentNumber(customerId);
                                         }
                                     })
@@ -669,7 +670,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         etIssueDate_SaleDataFragment.setText(MyDateTime.format(MyDateTime.getCurrentDatetime(), MyDateTime.TYPE_DATE));
         etExpiryDate_SaleDataFragment.setText(MyDateTime.format(MyDateTime.getCurrentDatetime(), MyDateTime.TYPE_DATE));
 
-        WebMethods objWebMethods = new WebMethods(getActivity(), this);
         objWebMethods.getVoucherTypes();
         objWebMethods.getPaymentConditions();
         objWebMethods.getPaymentMethods();
@@ -721,10 +721,10 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                 objSale.setPaymentMethod(((SimpleClass<PaymentMethod>)spPaymentMethod_SaleDataFragment.getSelectedItem()).getTag());
             }
 
-            if (objSale.getClient() == null) objSale.setClient(new Person());
+            /*if (objSale.getClient() == null) objSale.setClient(new Customer());
             objSale.getClient().setId(etCustomerId_SaleDataFragment.getText().length() > 0
                     ? etCustomerId_SaleDataFragment.getText().toString()
-                    : null);
+                    : null);*/
 
             objSale.setIssueDate(MyDateTime.parse(etIssueDate_SaleDataFragment.getText().toString(), MyDateTime.TYPE_DATE));
             objSale.setExpirationDate(MyDateTime.parse(etExpiryDate_SaleDataFragment.getText().toString(), MyDateTime.TYPE_DATE));
@@ -738,6 +738,9 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
     private void setCustomer(Customer objCustomer)
     {
+        boolean result = false;
+        String message = "";
+
         if (objCustomer != null)
         {
             if (objCustomer.isEnabled())
@@ -749,96 +752,43 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     if (objCustomer.getEmployee() != null &&
                             (objCustomer.getEmployee().getPerson().getId().equals(objUser.getEmployee().getId())))
                     {
-                        if (objCustomer.getStatus() == (ConstantData.CustomerStatus.DELINQUENT))
-                        {
-                            etCustomerId_SaleDataFragment.getText().clear();
-                            etCustomerDocumentNumber_SaleDataFragment.getText().clear();
-                            etCustomerBusinessName_SaleDataFragment.getText().clear();
-                            etCustomerAddress_SaleDataFragment.getText().clear();
-                            etSeller_SaleDataFragment.getText().clear();
-                            etSellerZone_SaleDataFragment.getText().clear();
-                            etSellerRoute_SaleDataFragment.getText().clear();
-
-                            //Toast.makeText(getActivity().getApplicationContext(), R.string.message_customer_delinqued, Toast.LENGTH_SHORT).show();
-                            Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
-                        }
-                        else
-                        {
-                            etCustomerId_SaleDataFragment.setText(String.format("%s", objCustomer.getId()));
-                            etCustomerDocumentNumber_SaleDataFragment.setText(objCustomer.getPerson().getDocumentNumber());
-                            etCustomerBusinessName_SaleDataFragment.setText(objCustomer.getPerson().getBusinessName());
-                            etCustomerAddress_SaleDataFragment.setText(objCustomer.getPerson().getAddress());
-                            if (objCustomer.getEmployee() != null)
-                            {
-                                etSeller_SaleDataFragment.setText(objCustomer.getEmployee().getPerson().getNames());
-                            }
-                            if (objCustomer.getRoute() != null && objCustomer.getRoute().getZone() != null)
-                            {
-                                etSellerZone_SaleDataFragment.setText(String.format("%s", objCustomer.getRoute().getZone().getId()));
-                                etSellerRoute_SaleDataFragment.setText(String.format("%s", objCustomer.getRoute().getId()));
-                            }
-                        }
+                        result = true;
                     }
                     else
                     {
-                        etCustomerId_SaleDataFragment.getText().clear();
-                        etCustomerDocumentNumber_SaleDataFragment.getText().clear();
-                        etCustomerBusinessName_SaleDataFragment.getText().clear();
-                        etCustomerAddress_SaleDataFragment.getText().clear();
-                        etSeller_SaleDataFragment.getText().clear();
-                        etSellerZone_SaleDataFragment.getText().clear();
-                        etSellerRoute_SaleDataFragment.getText().clear();
-
-                        Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_not_belong_seller) });
-                        //Toast.makeText(getActivity().getApplicationContext(), R.string.message_customer_not_belong_seller, Toast.LENGTH_SHORT).show();
+                        message = getString(R.string.message_customer_not_belong_seller);
                     }
                 }
                 else
                 {
-                    if (objCustomer.getStatus() == (ConstantData.CustomerStatus.DELINQUENT))
-                    {
-                        etCustomerId_SaleDataFragment.getText().clear();
-                        etCustomerDocumentNumber_SaleDataFragment.getText().clear();
-                        etCustomerBusinessName_SaleDataFragment.getText().clear();
-                        etCustomerAddress_SaleDataFragment.getText().clear();
-                        etSeller_SaleDataFragment.getText().clear();
-                        etSellerZone_SaleDataFragment.getText().clear();
-                        etSellerRoute_SaleDataFragment.getText().clear();
-
-                        //Toast.makeText(getActivity().getApplicationContext(), R.string.message_customer_delinqued, Toast.LENGTH_SHORT).show();
-                        Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
-                    }
-                    else
-                    {
-                        etCustomerId_SaleDataFragment.setText(String.format("%s", objCustomer.getId()));
-                        etCustomerDocumentNumber_SaleDataFragment.setText(objCustomer.getPerson().getDocumentNumber());
-                        etCustomerBusinessName_SaleDataFragment.setText(objCustomer.getPerson().getBusinessName());
-                        etCustomerAddress_SaleDataFragment.setText(objCustomer.getPerson().getAddress());
-                        if (objCustomer.getEmployee() != null)
-                        {
-                            etSeller_SaleDataFragment.setText(objCustomer.getEmployee().getPerson().getNames());
-                        }
-                        if (objCustomer.getRoute() != null && objCustomer.getRoute().getZone() != null)
-                        {
-                            etSellerZone_SaleDataFragment.setText(String.format("%s", objCustomer.getRoute().getZone().getId()));
-                            etSellerRoute_SaleDataFragment.setText(String.format("%s", objCustomer.getRoute().getId()));
-                        }
-                    }
+                    result = true;
                 }
             }
             else
             {
-                etCustomerId_SaleDataFragment.getText().clear();
-                etCustomerDocumentNumber_SaleDataFragment.getText().clear();
-                etCustomerBusinessName_SaleDataFragment.getText().clear();
-                etCustomerAddress_SaleDataFragment.getText().clear();
-                etSeller_SaleDataFragment.getText().clear();
-                etSellerZone_SaleDataFragment.getText().clear();
-                etSellerRoute_SaleDataFragment.getText().clear();
-
-                //Toast.makeText(getActivity().getApplicationContext(), R.string.message_customer_disabled, Toast.LENGTH_SHORT).show();
-                Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_disabled) });
+                message = getString(R.string.message_customer_disabled);
             }
+        }
+
+        objSale.setClient(result ? objCustomer : null);
+
+        if (result)
+        {
+            etCustomerId_SaleDataFragment.setText(String.format("%s", objCustomer.getId()));
+            etCustomerDocumentNumber_SaleDataFragment.setText(objCustomer.getPerson().getDocumentNumber());
+            etCustomerBusinessName_SaleDataFragment.setText(objCustomer.getPerson().getBusinessName());
+            etCustomerAddress_SaleDataFragment.setText(objCustomer.getPerson().getAddress());
+            if (objCustomer.getEmployee() != null)
+            {
+                etSeller_SaleDataFragment.setText(objCustomer.getEmployee().getPerson().getNames());
+            }
+            if (objCustomer.getRoute() != null && objCustomer.getRoute().getZone() != null)
+            {
+                etSellerZone_SaleDataFragment.setText(String.format("%s", objCustomer.getRoute().getZone().getId()));
+                etSellerRoute_SaleDataFragment.setText(String.format("%s", objCustomer.getRoute().getId()));
+            }
+
+            objWebMethods.getCreditSalesPendingByCustomer(objCustomer.getId(), objCompany.getId());
         }
         else
         {
@@ -849,6 +799,12 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
             etSeller_SaleDataFragment.getText().clear();
             etSellerZone_SaleDataFragment.getText().clear();
             etSellerRoute_SaleDataFragment.getText().clear();
+
+            if (!message.isEmpty())
+            {
+                Utilities.showMessage(getActivity(), new String[]{ message });
+                //Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

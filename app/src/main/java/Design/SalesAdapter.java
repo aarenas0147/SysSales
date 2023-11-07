@@ -59,7 +59,7 @@ public class SalesAdapter extends BaseAdapter {
         tvTotal_SalesAdapter = (TextView) viewGroup.findViewById(R.id.tvTotal_SalesAdapter);
 
         tvSaleId_SalesAdapter.setText(String.format("N° Pedido: %s", list.get(position).getId()));
-        tvCustomerName_SalesAdapter.setText(String.format("Cliente: %s", list.get(position).getClient().getBusinessName()));
+        tvCustomerName_SalesAdapter.setText(String.format("Cliente: %s", list.get(position).getClient().getPerson().getBusinessName()));
         tvVoucherDescription_SalesAdapter.setText(String.format("Tipo de documento: %s", list.get(position).getVoucherType().getDescription()));
         tvCustomerId_SalesAdapter.setText(String.format("Cod. cliente: %s", list.get(position).getClient().getId()));
         tvTotal_SalesAdapter.setText(String.format("Total: %s", MyMath.toDecimal(list.get(position).getTotal(), 2)));

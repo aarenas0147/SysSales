@@ -17,7 +17,7 @@ public class Sale implements Parcelable {
 
     private Object Id;
     private VoucherType VoucherType;
-    private Person Client;
+    private Customer Client;
     private Employee Employee;
     private Date IssueDate, ExpirationDate, CreationDate;
     private PaymentCondition PaymentCondition;
@@ -31,7 +31,7 @@ public class Sale implements Parcelable {
     protected Sale(Parcel in) {
         Id = in.readValue(getClass().getClassLoader());
         VoucherType = in.readParcelable(Data.Objects.VoucherType.class.getClassLoader());
-        Client = in.readParcelable(Person.class.getClassLoader());
+        Client = in.readParcelable(Customer.class.getClassLoader());
         Employee = in.readParcelable(Employee.class.getClassLoader());
         long tmpIssueDate = in.readLong();
         IssueDate = tmpIssueDate != 0 ? new Date(tmpIssueDate) : null;
@@ -85,11 +85,11 @@ public class Sale implements Parcelable {
         VoucherType = voucherType;
     }
 
-    public Person getClient() {
+    public Customer getClient() {
         return Client;
     }
 
-    public void setClient(Person client) {
+    public void setClient(Customer client) {
         Client = client;
     }
 
@@ -232,7 +232,7 @@ public class Sale implements Parcelable {
             objSale.setVoucherType(result.get("VoucherType") != JSONObject.NULL ?
                     Data.Objects.VoucherType.getItem(new JSONObject(result.get("VoucherType").toString())) : null);
             objSale.setClient(result.get("Client") != JSONObject.NULL ?
-                    Data.Objects.Person.getItem(new JSONObject(result.get("Client").toString())) : null);
+                    Data.Objects.Customer.getItem(new JSONObject(result.get("Client").toString())) : null);
             objSale.setEmployee(result.get("Employee") != JSONObject.NULL ?
                     Data.Objects.Employee.getItem(new JSONObject(result.get("Employee").toString())) : null);
             objSale.setIssueDate(result.get("IssueDate") != JSONObject.NULL ? MyDateTime.parseNet(result.get("IssueDate").toString()) : null);
