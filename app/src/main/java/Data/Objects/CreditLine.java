@@ -121,8 +121,8 @@ public class CreditLine implements Parcelable {
                     Data.Objects.Customer.getItem(new JSONObject(result.get("Customer").toString())) : null);
             objCreditLine.setAmount(result.get("Amount") != JSONObject.NULL ? Float.parseFloat(result.get("Amount").toString()) : 0F);
             objCreditLine.setActivationDate(result.get("ActivationDate") != JSONObject.NULL ? MyDateTime.parseNet(result.get("ActivationDate").toString()) : null);
-            objCreditLine.setDays(result.get("Days") != JSONObject.NULL ? Integer.parseInt(result.get("Days").toString()) : 0);
-            objCreditLine.setMaximumDays(result.get("MaximumDays") != JSONObject.NULL ? Integer.parseInt(result.get("MaximumDays").toString()) : 0);
+            objCreditLine.setDays(result.get("Days") != JSONObject.NULL ? result.getInt("Days") : 0);
+            objCreditLine.setMaximumDays(result.get("MaximumDays") != JSONObject.NULL ? result.getInt("MaximumDays") : 0);
             objCreditLine.setEnabled(result.get("Enabled") != JSONObject.NULL && result.getBoolean("Enabled"));
 
             return objCreditLine;

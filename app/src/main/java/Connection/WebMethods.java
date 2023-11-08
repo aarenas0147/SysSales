@@ -1,10 +1,6 @@
 package Connection;
 
 import android.content.Context;
-import android.util.Log;
-
-import Data.Utilities;
-import okhttp3.internal.Util;
 
 public class WebMethods {
 
@@ -17,8 +13,7 @@ public class WebMethods {
     public static final int TYPE_OPEN_SALE = 6;
     public static final int TYPE_LIST_VOUCHER_TYPES = 7;
     public static final int TYPE_LIST_PAYMENT_CONDITIONS = 8;
-    public static final int TYPE_LIST_PAYMENT_METHODS = 9;
-    public static final int TYPE_VALIDATE_PAYMENT_METHOD = 10;
+    public static final int TYPE_LIST_PAYMENT_METHODS = 10;
     public static final int TYPE_LIST_PAYMENT_METHOD_DETAILS = 11;
     public static final int TYPE_LIST_SALE_PAYMENT_METHODS = 12;
     public static final int TYPE_ADD_PAYMENT_METHOD_BY_SALE = 13;
@@ -224,24 +219,6 @@ public class WebMethods {
                     this.context, this.listener,
                     TYPE_LIST_PAYMENT_METHODS);
 
-            webServices.execute();
-        }
-    }
-
-    public void validatePaymentCondition(Object id, Object customerId)
-    {
-        if (config != null && !config.getServer().equals(""))
-        {
-            final String methodName = "validatePaymentCondition";
-
-            WebServices webServices = new WebServices(config.getNamespace(),
-                    String.format("http://%s/%s", config.getServer(), "NewSale.asmx"), methodName,
-                    String.format("%s%s", config.getNamespace(), methodName),
-                    this.context, this.listener,
-                    TYPE_VALIDATE_PAYMENT_METHOD);
-
-            webServices.addParameter("id", id);
-            webServices.addParameter("customerId", customerId);
             webServices.execute();
         }
     }
@@ -1017,19 +994,20 @@ public class WebMethods {
         }
     }
 
-    public void getCreditLineByCustomer(Object customerId)
+    public void getCreditLineByCustomer(Object customerId, Object company)
     {
         if (config != null && !config.getServer().equals(""))
         {
             final String methodName = "getCreditLineByCustomer";
 
             WebServices webServices = new WebServices(config.getNamespace(),
-                    String.format("http://%s/%s", config.getServer(), "NewSale.asmx"), methodName,
+                    String.format("http://%s/%s", config.getServer(), "Customers.asmx"), methodName,
                     String.format("%s%s", config.getNamespace(), methodName),
                     this.context, this.listener,
                     TYPE_LIST_CREDIT_LINE_BY_CUSTOMER);
 
             webServices.addParameter("customerId", customerId);
+            webServices.addParameter("company", company);
             webServices.execute();
         }
     }
