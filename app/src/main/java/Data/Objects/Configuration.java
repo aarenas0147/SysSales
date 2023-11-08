@@ -11,7 +11,8 @@ public class Configuration implements Parcelable {
     private boolean OptionShowNotifications, OptionNewSale, OptionSales, OptionAccountReceivable,
             OptionCollectionSheet, OptionNewCustomer, OptionEditCustomer, OptionFindPersonOnline,
             OptionNewProduct, OptionTimeLimit, OptionSalesByVendor, OptionVendors, OptionVendorByCustomer,
-            OptionIssueDate, OptionExpiryDate, OptionCustomPaymentMethod, OptionPrintSale, OptionPrintSalePdf;
+            OptionIssueDate, OptionExpiryDate, OptionCustomPaymentMethod, OptionCreditLine,
+            OptionPrintSale, OptionPrintSalePdf;
 
     public Configuration() {
     }
@@ -34,6 +35,7 @@ public class Configuration implements Parcelable {
         OptionIssueDate = in.readByte() != 0;
         OptionExpiryDate = in.readByte() != 0;
         OptionCustomPaymentMethod = in.readByte() != 0;
+        OptionCreditLine = in.readByte() != 0;
         OptionPrintSale = in.readByte() != 0;
         OptionPrintSalePdf = in.readByte() != 0;
     }
@@ -186,6 +188,14 @@ public class Configuration implements Parcelable {
         OptionCustomPaymentMethod = optionCustomPaymentMethod;
     }
 
+    public boolean isOptionCreditLine() {
+        return OptionCreditLine;
+    }
+
+    public void setOptionCreditLine(boolean optionCreditLine) {
+        OptionCreditLine = optionCreditLine;
+    }
+
     public boolean isOptionPrintSale() {
         return OptionPrintSale;
     }
@@ -243,6 +253,8 @@ public class Configuration implements Parcelable {
                     && result.getBoolean("OptionCustomPaymentMethod"));
             objConfiguration.setOptionPrintSale(result.get("OptionPrintSale") != JSONObject.NULL
                     && result.getBoolean("OptionPrintSale"));
+            objConfiguration.setOptionCreditLine(result.get("OptionCreditLine") != JSONObject.NULL
+                    && result.getBoolean("OptionCreditLine"));
             objConfiguration.setOptionPrintSalePdf(result.get("OptionPrintSalePdf") != JSONObject.NULL
                     && result.getBoolean("OptionPrintSalePdf"));
 
@@ -278,6 +290,7 @@ public class Configuration implements Parcelable {
         parcel.writeByte((byte) (OptionIssueDate ? 1 : 0));
         parcel.writeByte((byte) (OptionExpiryDate ? 1 : 0));
         parcel.writeByte((byte) (OptionCustomPaymentMethod ? 1 : 0));
+        parcel.writeByte((byte) (OptionCreditLine ? 1 : 0));
         parcel.writeByte((byte) (OptionPrintSale ? 1 : 0));
         parcel.writeByte((byte) (OptionPrintSalePdf ? 1 : 0));
     }
