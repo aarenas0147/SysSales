@@ -110,7 +110,7 @@ public class PaymentCondition implements Parcelable {
         {
             PaymentCondition objPaymentCondition = new PaymentCondition();
 
-            objPaymentCondition.setId(result.get("Id") != JSONObject.NULL ? result.getInt("Id") : ConstantData.PaymentCondition.CUSTOMIZED);
+            objPaymentCondition.setId(result.get("Id") != JSONObject.NULL ? result.getInt("Id") : ConstantData.PaymentCondition.CASH);
             objPaymentCondition.setDescription(result.get("Description") != JSONObject.NULL ? result.getString("Description") : null);
             objPaymentCondition.setDueDays(result.get("DueDays") != JSONObject.NULL ? result.getInt("DueDays") : null);
             objPaymentCondition.setDueDaysEditable(result.get("DueDaysEditable") != JSONObject.NULL && result.getBoolean("DueDaysEditable"));
