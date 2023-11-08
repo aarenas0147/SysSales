@@ -13,7 +13,7 @@ import java.util.List;
 
 public class PaymentCondition implements Parcelable {
 
-    private Object Id;
+    private int Id;
     private String Description;
     private Integer DueDays;
     private boolean DueDaysEditable, Enabled;
@@ -22,7 +22,7 @@ public class PaymentCondition implements Parcelable {
     }
 
     protected PaymentCondition(Parcel in) {
-        Id = in.readValue(getClass().getClassLoader());
+        Id = in.readInt();
         Description = in.readString();
         if (in.readByte() == 0) {
             DueDays = null;
@@ -45,11 +45,11 @@ public class PaymentCondition implements Parcelable {
         }
     };
 
-    public Object getId() {
+    public int getId() {
         return Id;
     }
 
-    public void setId(Object id) {
+    public void setId(int id) {
         Id = id;
     }
 
@@ -92,7 +92,7 @@ public class PaymentCondition implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeValue(Id);
+        dest.writeInt(Id);
         dest.writeString(Description);
         if (DueDays == null) {
             dest.writeByte((byte) 0);
@@ -110,7 +110,7 @@ public class PaymentCondition implements Parcelable {
         {
             PaymentCondition objPaymentCondition = new PaymentCondition();
 
-            objPaymentCondition.setId(result.get("Id") != JSONObject.NULL ? result.get("Id") : null);
+            objPaymentCondition.setId(result.get("Id") != JSONObject.NULL ? result.getInt("Id") : ConstantData.PaymentCondition.CUSTOMIZED);
             objPaymentCondition.setDescription(result.get("Description") != JSONObject.NULL ? result.getString("Description") : null);
             objPaymentCondition.setDueDays(result.get("DueDays") != JSONObject.NULL ? result.getInt("DueDays") : null);
             objPaymentCondition.setDueDaysEditable(result.get("DueDaysEditable") != JSONObject.NULL && result.getBoolean("DueDaysEditable"));
