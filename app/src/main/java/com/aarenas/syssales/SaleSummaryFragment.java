@@ -317,8 +317,8 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
             }
             else
             {
-                if (this.objSale.getVoucherType().getId() == null || this.objSale.getPaymentCondition().getId() == null
-                        || this.objSale.getPaymentMethod().getId() == null|| this.objSale.getClient().getId() == null)
+                if (this.objSale.getVoucherType().getId() == null || /*this.objSale.getPaymentCondition().getId() == null
+                        ||*/ this.objSale.getPaymentMethod().getId() == null|| this.objSale.getClient().getId() == null)
                 {
                     return false;
                 }

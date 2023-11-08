@@ -34,6 +34,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -108,7 +109,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     ActivityResultLauncher<Intent> resultLauncherCustomerAdd;
 
     //Asynctask:
-    //List<PaymentMethod> listPaymentMethod;
+    List<CreditLine> listCreditLineByCustomer = null;
 
     //Variables:
     private WebMethods objWebMethods;
@@ -271,18 +272,10 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                 {
                     etExpiryDate_SaleDataFragment.setEnabled(objPaymentCondition.getTag().isDueDaysEditable());
 
-                    Calendar _issueDate = (Calendar) issueDate.clone();
-                    _issueDate.add(Calendar.DAY_OF_YEAR, objPaymentCondition.getTag().getDueDays() != null ? objPaymentCondition.getTag().getDueDays() : 0);
-                    setExpiryDate(_issueDate.get(Calendar.DAY_OF_MONTH), _issueDate.get(Calendar.MONTH), _issueDate.get(Calendar.YEAR));
+                    validatePaymentCondition();
                 }
 
                 InteractionFragment();
-
-                /*if (objCustomer != null && objCustomer.getStatus() == ConstantData.CustomerStatus.DELINQUENT)
-                {
-                    objWebMethods.getCreditLineByCustomer(objCustomer.getId());
-                    //Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
-                }*/
             }
 
             @Override
@@ -451,20 +444,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                                 listAdapter.add(objSimpleClass);
                             }
 
-                            /*if (objConfiguration != null && objConfiguration.isOptionCustomPaymentMethod())
-                            {
-                                PaymentMethod objPaymentMethod = new PaymentMethod();
-                                //objPaymentMethod.setId(-99);
-                                objPaymentMethod.setId("PERSONALIZADO");
-                                objPaymentMethod.setDescription("PERSONALIZADO");
-
-                                objSimpleClass = new SimpleClass<>();
-                                objSimpleClass.setId(objPaymentMethod.getId());
-                                objSimpleClass.setDescription(objPaymentMethod.getDescription());
-                                objSimpleClass.setTag(objPaymentMethod);
-                                listAdapter.add(objSimpleClass);
-                            }*/
-
                             SpinnerAdapter<PaymentMethod> adapter =
                                     new SpinnerAdapter<>(getActivity().getApplicationContext(), listAdapter);
                             spPaymentMethod_SaleDataFragment.setAdapter(adapter);
@@ -505,17 +484,25 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                         List<CreditSale> list = CreditSale.getList(jsonArray);
                         if (list != null && list.size() > 0)
                         {
+                            objSale.getClient().setStatus(ConstantData.CustomerStatus.DELINQUENT);
                             Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
+                        }
+
+                        if (objConfiguration != null && objConfiguration.isOptionCreditLine())
+                        {
+                            objWebMethods.getCreditLineByCustomer(objSale.getClient().getId(), objCompany.getId());
+                        }
+                        else
+                        {
+                            validatePaymentCondition();
                         }
                     }
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_CUSTOMER)
                     {
-                        /*JSONArray jsonArray = new JSONArray(result.getResult().toString());
-                        List<CreditLine> list = CreditLine.getList(jsonArray);
-                        if (list != null && list.size() > 0)
-                        {
+                        JSONArray jsonArray = new JSONArray(result.getResult().toString());
+                        listCreditLineByCustomer = CreditLine.getList(jsonArray);
 
-                        }*/
+                        validatePaymentCondition();
                     }
                 }
                 else
@@ -610,6 +597,17 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                             Toast.makeText(getActivity().getApplicationContext(), R.string.message_not_exist_customer, Toast.LENGTH_SHORT).show();
                             InteractionFragment();
                         }
+                    }
+                    else if (processId == WebMethods.TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER)
+                    {
+                        if (objConfiguration != null && objConfiguration.isOptionCreditLine())
+                        {
+                            objWebMethods.getCreditLineByCustomer(objSale.getClient().getId(), objCompany.getId());
+                        }
+                    }
+                    else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_CUSTOMER)
+                    {
+                        validatePaymentCondition();
                     }
                 }
             }
@@ -771,6 +769,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         }
 
         objSale.setClient(result ? objCustomer : null);
+        listCreditLineByCustomer = null;
 
         if (result)
         {
@@ -805,6 +804,36 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                 Utilities.showMessage(getActivity(), new String[]{ message });
                 //Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
+
+            validatePaymentCondition();
+        }
+    }
+
+    private void validatePaymentCondition()
+    {
+        SimpleClass<PaymentCondition> objPaymentCondition = (SimpleClass<PaymentCondition>)spPaymentCondition_SaleDataFragment.getSelectedItem();
+
+        if (objPaymentCondition.getTag().getId() == ConstantData.PaymentCondition.CREDIT &&
+                objSale.getClient() != null &&
+                (listCreditLineByCustomer != null && listCreditLineByCustomer.size() > 0))
+        {
+            if (objSale.getClient().getStatus() == ConstantData.CustomerStatus.DELINQUENT)
+            {
+                spPaymentCondition_SaleDataFragment.setSelection(0);
+                Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued_no_credit) });
+            }
+            else
+            {
+                Calendar _expiryDate = (Calendar) issueDate.clone();
+                _expiryDate.add(Calendar.DAY_OF_YEAR, listCreditLineByCustomer.get(0).getDays());
+                setExpiryDate(_expiryDate.get(Calendar.DAY_OF_MONTH), _expiryDate.get(Calendar.MONTH), _expiryDate.get(Calendar.YEAR));
+            }
+        }
+        else
+        {
+            Calendar _expiryDate = (Calendar) issueDate.clone();
+            _expiryDate.add(Calendar.DAY_OF_YEAR, objPaymentCondition.getTag().getDueDays() != null ? objPaymentCondition.getTag().getDueDays() : 0);
+            setExpiryDate(_expiryDate.get(Calendar.DAY_OF_MONTH), _expiryDate.get(Calendar.MONTH), _expiryDate.get(Calendar.YEAR));
         }
     }
 
