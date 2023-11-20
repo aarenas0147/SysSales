@@ -17,6 +17,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/app_background" />
 
+    <TextView
+        android:id="@+id/tvAppVersion_Login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
@@ -54,20 +66,20 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="5dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
         card_view:cardBackgroundColor="@color/white"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="10dp">
+        card_view:cardCornerRadius="12dp"
+        card_view:cardElevation="6dp">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -116,7 +128,6 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
                     app:boxCornerRadiusBottomEnd="6dp"
                     app:boxCornerRadiusBottomStart="6dp"
                     app:boxCornerRadiusTopEnd="6dp"
@@ -145,7 +156,7 @@
                     android:id="@+id/btnLogin_Login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/log_in"
                     app:cornerRadius="10dp" />
 
@@ -160,14 +171,6 @@
                     android:textSize="12sp"
                     android:textStyle="italic"
                     card_view:ignore="SmallSp" />
-
-                <TextView
-                    android:id="@+id/tvAppVersion_Login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/purple_700"
-                    android:textSize="14sp" />
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>

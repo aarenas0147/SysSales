@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
             }
         });
 
-        tvAppVersion_Login.setText(String.format("Versión %s", BuildConfig.VERSION_NAME));
+        tvAppVersion_Login.setText(String.format("%s", BuildConfig.VERSION_NAME));
 
         resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
