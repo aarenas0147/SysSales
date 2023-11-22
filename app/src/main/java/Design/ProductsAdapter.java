@@ -74,9 +74,9 @@ public class ProductsAdapter extends BaseAdapter {
                 list.get(position).getId(), list.get(position).getDescription()));
         tvStock_ProductsAdapter.setText(String.format("Stock: %s",
                 MyMath.toRoundNumber(list.get(position).getStock())));
-        tvPrice_ProductsAdapter.setText(String.format("Prec. Venta: %s",
+        tvPrice_ProductsAdapter.setText(String.format("Prec. Vta.: S/ %s",
                 MyMath.toDecimal(list.get(position).getPrice(), 2)));
-        tvLimitPrice_ProductsAdapter.setText(String.format("Prec. Límite: %s",
+        tvLimitPrice_ProductsAdapter.setText(String.format("Prec. Lím.: S/ %s",
                 MyMath.toDecimal(list.get(position).getLimitPrice(), 2)));
 
         return viewGroup;

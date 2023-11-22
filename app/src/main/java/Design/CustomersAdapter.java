@@ -16,7 +16,7 @@ public class CustomersAdapter extends BaseAdapter {
 
     Context ctx;
     LayoutInflater layoutInflater;
-    TextView tvBusinessName_CustomersAdapter, tvVendor_CustomersAdapter, tvId_CustomersAdapter, tvDocumentNumber_CustomersAdapter;
+    TextView tvBusinessName_CustomersAdapter, tvVendor_CustomersAdapter, tvDocumentNumber_CustomersAdapter;
     List<Customer> list;
     boolean optionVendors;
 
@@ -61,17 +61,16 @@ public class CustomersAdapter extends BaseAdapter {
 
         tvBusinessName_CustomersAdapter = (TextView) viewGroup.findViewById(R.id.tvBusinessName_CustomersAdapter);
         tvVendor_CustomersAdapter = (TextView) viewGroup.findViewById(R.id.tvVendor_CustomersAdapter);
-        tvId_CustomersAdapter = (TextView) viewGroup.findViewById(R.id.tvId_CustomersAdapter);
         tvDocumentNumber_CustomersAdapter = (TextView) viewGroup.findViewById(R.id.tvDocumentNumber_CustomersAdapter);
 
         tvVendor_CustomersAdapter.setVisibility(this.optionVendors ? View.VISIBLE : View.GONE);
 
-        tvBusinessName_CustomersAdapter.setText(list.get(position).getPerson().getBusinessName());
+        tvBusinessName_CustomersAdapter.setText(String.format("[%s] %s",
+                list.get(position).getId(), list.get(position).getPerson().getBusinessName()));
         if (list.get(position).getEmployee() != null)
         {
             tvVendor_CustomersAdapter.setText(String.format("Vendedor: %s", list.get(position).getEmployee().getPerson().getNames()));
         }
-        tvId_CustomersAdapter.setText(String.format("Cod. cliente: %s", list.get(position).getId()));
         tvDocumentNumber_CustomersAdapter.setText(String.format("N° doc.: %s", list.get(position).getPerson().getDocumentNumber()));
 
         return viewGroup;
