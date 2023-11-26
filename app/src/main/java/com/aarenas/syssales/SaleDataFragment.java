@@ -109,6 +109,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     ActivityResultLauncher<Intent> resultLauncherCustomerAdd;
 
     //Asynctask:
+    List<CreditSale> listCreditSaleByCustomer = null;
     List<CreditLine> listCreditLineByCustomer = null;
 
     //Variables:
@@ -481,8 +482,8 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER)
                     {
                         JSONArray jsonArray = new JSONArray(result.getResult().toString());
-                        List<CreditSale> list = CreditSale.getList(jsonArray);
-                        if (list != null && list.size() > 0)
+                        listCreditSaleByCustomer = CreditSale.getList(jsonArray);
+                        if (listCreditSaleByCustomer != null && listCreditSaleByCustomer.size() > 0)
                         {
                             objSale.getClient().setStatus(ConstantData.CustomerStatus.DELINQUENT);
                             Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
@@ -817,7 +818,17 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                 objSale.getClient() != null &&
                 (listCreditLineByCustomer != null && listCreditLineByCustomer.size() > 0))
         {
-            if (objSale.getClient().getStatus() == ConstantData.CustomerStatus.DELINQUENT)
+            float debtAmount = 0F;
+            if (listCreditSaleByCustomer != null)
+            {
+                for (int i = 0; i < listCreditSaleByCustomer.size(); i++)
+                {
+                    debtAmount += listCreditSaleByCustomer.get(i).getAmount();
+                }
+            }
+
+            if (objSale.getClient().getStatus() == ConstantData.CustomerStatus.DELINQUENT &&
+                    debtAmount >= listCreditLineByCustomer.get(0).getAmount())
             {
                 spPaymentCondition_SaleDataFragment.setSelection(0);
                 Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued_no_credit) });
