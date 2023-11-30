@@ -315,6 +315,26 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lytCreditLineByCustomer_SaleDataFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:enabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCreditLineAmount_SaleDataFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/credit_line"
+                            android:inputType="number|numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/lytVendorByCustomer_SaleDataFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

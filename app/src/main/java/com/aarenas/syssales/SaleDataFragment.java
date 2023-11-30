@@ -44,6 +44,7 @@ import java.util.List;
 import Connection.WebMethods;
 import Connection.WebServices;
 import Data.MyDateTime;
+import Data.MyMath;
 import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.ConstantData;
@@ -93,10 +94,11 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     private TextInputEditText etCustomerId_SaleDataFragment, etCustomerDocumentNumber_SaleDataFragment,
             etCustomerBusinessName_SaleDataFragment, etCustomerAddress_SaleDataFragment,
             etIssueDate_SaleDataFragment, etExpiryDate_SaleDataFragment,
-            etSeller_SaleDataFragment, etSellerZone_SaleDataFragment, etSellerRoute_SaleDataFragment;
+            etSeller_SaleDataFragment, etSellerZone_SaleDataFragment, etSellerRoute_SaleDataFragment,
+            etCreditLineAmount_SaleDataFragment;
     private Spinner spVoucherType_SaleDataFragment, spPaymentCondition_SaleDataFragment, spPaymentMethod_SaleDataFragment;
     private ImageButton btnFindCustomer_SaleDataFragment, btnCustomers_SaleDataFragment, btnSalePaymentMethods_SaleDataFragment;
-    private LinearLayout lytVendorByCustomer_SaleDataFragment;
+    private LinearLayout lytVendorByCustomer_SaleDataFragment, lytCreditLineByCustomer_SaleDataFragment;
 
     //Parameters:
     private Bundle parameters;
@@ -117,6 +119,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     private Calendar issueDate = Calendar.getInstance();
     private Calendar expiryDate = Calendar.getInstance();
     private float balance = 0F;
+    private float debtAmount = 0F;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,6 +147,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         etSeller_SaleDataFragment = rootView.findViewById(R.id.etSeller_SaleDataFragment);
         etSellerZone_SaleDataFragment = rootView.findViewById(R.id.etSellerZone_SaleDataFragment);
         etSellerRoute_SaleDataFragment = rootView.findViewById(R.id.etSellerRoute_SaleDataFragment);
+        etCreditLineAmount_SaleDataFragment = rootView.findViewById(R.id.etCreditLineAmount_SaleDataFragment);
         spVoucherType_SaleDataFragment = rootView.findViewById(R.id.spVoucherType_SaleDataFragment);
         spPaymentCondition_SaleDataFragment = rootView.findViewById(R.id.spPaymentCondition_SaleDataFragment);
         spPaymentMethod_SaleDataFragment = rootView.findViewById(R.id.spPaymentMethod_SaleDataFragment);
@@ -151,9 +155,11 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         btnCustomers_SaleDataFragment = rootView.findViewById(R.id.btnCustomers_SaleDataFragment);
         btnSalePaymentMethods_SaleDataFragment = rootView.findViewById(R.id.btnSalePaymentMethods_SaleDataFragment);
         lytVendorByCustomer_SaleDataFragment = rootView.findViewById(R.id.lytVendorByCustomer_SaleDataFragment);
+        lytCreditLineByCustomer_SaleDataFragment = rootView.findViewById(R.id.lytCreditLineByCustomer_SaleDataFragment);
 
         btnSalePaymentMethods_SaleDataFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCustomPaymentMethod() ? View.VISIBLE : View.GONE);
         lytVendorByCustomer_SaleDataFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionVendors() ? View.VISIBLE : View.GONE);
+        lytCreditLineByCustomer_SaleDataFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCreditLine() ? View.VISIBLE : View.GONE);
 
         ActivityResultLauncher<Intent> resultLauncherCustomer = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -485,8 +491,16 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                         listCreditSaleByCustomer = CreditSale.getList(jsonArray);
                         if (listCreditSaleByCustomer != null && listCreditSaleByCustomer.size() > 0)
                         {
+                            debtAmount = 0F;
+                            for (int i = 0; i < listCreditSaleByCustomer.size(); i++)
+                            {
+                                debtAmount += listCreditSaleByCustomer.get(i).getAmount();
+                            }
+
                             objSale.getClient().setStatus(ConstantData.CustomerStatus.DELINQUENT);
-                            Utilities.showMessage(getActivity(), new String[]{ getString(R.string.message_customer_delinqued) });
+                            Utilities.showMessage(getActivity(), new String[]{
+                                    getString(R.string.message_customer_delinqued),
+                                    String.format("Total: S/ %s", MyMath.toDecimal(debtAmount, 2))});
                         }
 
                         if (objConfiguration != null && objConfiguration.isOptionCreditLine())
@@ -502,6 +516,12 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     {
                         JSONArray jsonArray = new JSONArray(result.getResult().toString());
                         listCreditLineByCustomer = CreditLine.getList(jsonArray);
+                        if (listCreditLineByCustomer != null && listCreditLineByCustomer.size() > 0)
+                        {
+                            etCreditLineAmount_SaleDataFragment.setText(MyMath.toDecimal(
+                                    (debtAmount < listCreditLineByCustomer.get(0).getAmount() ?
+                                            listCreditLineByCustomer.get(0).getAmount() - debtAmount : 0F), 2));
+                        }
 
                         validatePaymentCondition();
                     }
@@ -601,6 +621,8 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     }
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER)
                     {
+                        debtAmount = 0F;
+
                         if (objConfiguration != null && objConfiguration.isOptionCreditLine())
                         {
                             objWebMethods.getCreditLineByCustomer(objSale.getClient().getId(), objCompany.getId());
@@ -608,6 +630,8 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     }
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_CUSTOMER)
                     {
+                        etCreditLineAmount_SaleDataFragment.setText(MyMath.toDecimal(0F, 2));
+
                         validatePaymentCondition();
                     }
                 }
@@ -818,14 +842,14 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                 objSale.getClient() != null &&
                 (listCreditLineByCustomer != null && listCreditLineByCustomer.size() > 0))
         {
-            float debtAmount = 0F;
+            /*debtAmount = 0F;
             if (listCreditSaleByCustomer != null)
             {
                 for (int i = 0; i < listCreditSaleByCustomer.size(); i++)
                 {
                     debtAmount += listCreditSaleByCustomer.get(i).getAmount();
                 }
-            }
+            }*/
 
             if (objSale.getClient().getStatus() == ConstantData.CustomerStatus.DELINQUENT &&
                     debtAmount >= listCreditLineByCustomer.get(0).getAmount())
