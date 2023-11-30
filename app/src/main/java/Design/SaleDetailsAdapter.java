@@ -66,10 +66,10 @@ public class SaleDetailsAdapter<T> extends BaseAdapter {
                 tvDescription_SaleDetails.setText(String.format("[%s] %s",
                         ((SaleDetail)list.get(position)).getProduct().getId(),
                         ((SaleDetail)list.get(position)).getProduct().getDescription().trim()));
-                tvUnitPrice_SaleDetails.setText(String.format("Prec. Unit: S/.%s",
+                tvUnitPrice_SaleDetails.setText(String.format("Prec. Unit: S/ %s",
                         MyMath.toDecimal(((SaleDetail)list.get(position)).getProduct().getPrice(), 2)));
                 tvQuantity_SaleDetails.setText(String.format("Cantidad: %s", MyMath.toRoundNumber(((SaleDetail)list.get(position)).getQuantity())));
-                tvTotal_SaleDetails.setText(String.format("Importe: S/.%s", MyMath.toDecimal(((SaleDetail)list.get(position)).getTotal(), 2)));
+                tvTotal_SaleDetails.setText(String.format("Importe: S/ %s", MyMath.toDecimal(((SaleDetail)list.get(position)).getTotal(), 2)));
             }
         }
 

@@ -61,9 +61,9 @@ public class CreditSaleQuotesAdapter extends BaseAdapter {
         tvCreationDate_CreditSaleQuotesAdapter = (TextView) viewGroup.findViewById(R.id.tvCreationDate_CreditSaleQuotesAdapter);
 
         tvQuoteNumber_CreditSaleQuotesAdapter.setText(String.format("N° de cuota: %s", list.get(position).getQuoteNumber()));
-        tvAmount_CreditSaleQuotesAdapter.setText(String.format("Monto: S/.%s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
-        tvPayment_CreditSaleQuotesAdapter.setText(String.format("A cuenta: S/.%s", MyMath.toDecimal(list.get(position).getPayment(), 2)));
-        tvBalance_CreditSaleQuotesAdapter.setText(String.format("Saldo: S/.%s", MyMath.toDecimal(list.get(position).getBalance(), 2)));
+        tvAmount_CreditSaleQuotesAdapter.setText(String.format("Monto: S/ %s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
+        tvPayment_CreditSaleQuotesAdapter.setText(String.format("A cuenta: S/ %s", MyMath.toDecimal(list.get(position).getPayment(), 2)));
+        tvBalance_CreditSaleQuotesAdapter.setText(String.format("Saldo: S/ %s", MyMath.toDecimal(list.get(position).getBalance(), 2)));
         tvCreationDate_CreditSaleQuotesAdapter.setText(String.format("Fecha de amortización: %s",
                 MyDateTime.format(list.get(position).getDate(), MyDateTime.TYPE_DATE)));
 

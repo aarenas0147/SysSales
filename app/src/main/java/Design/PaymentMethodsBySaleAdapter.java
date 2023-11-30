@@ -59,9 +59,9 @@ public class PaymentMethodsBySaleAdapter extends BaseAdapter {
         tvTotal_PaymentMethodsBySaleAdapter = (TextView) viewGroup.findViewById(R.id.tvTotal_PaymentMethodsBySaleAdapter);
 
         tvPaymentMethod_PaymentMethodsBySaleAdapter.setText(String.format("%s", list.get(position).getPaymentMethod().getDescription().toUpperCase()));
-        tvAmount_PaymentMethodsBySaleAdapter.setText(String.format("Monto: S/.%s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
+        tvAmount_PaymentMethodsBySaleAdapter.setText(String.format("Monto: S/ %s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
         tvPercentage_PaymentMethodsBySaleAdapter.setText(String.format("Comisión: %s%%", MyMath.toRoundNumber(list.get(position).getCommissionPercentage())));
-        tvTotal_PaymentMethodsBySaleAdapter.setText(String.format("Importe: S/.%s", MyMath.toDecimal(list.get(position).getTotal(), 2)));
+        tvTotal_PaymentMethodsBySaleAdapter.setText(String.format("Importe: S/ %s", MyMath.toDecimal(list.get(position).getTotal(), 2)));
 
         return viewGroup;
     }
