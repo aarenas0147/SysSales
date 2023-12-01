@@ -61,12 +61,12 @@ public class AccountsReceivableAdapter extends BaseAdapter {
         tvAmount_AccountsReceivableAdapter = (TextView) viewGroup.findViewById(R.id.tvAmount_AccountsReceivableAdapter);
         tvCreationDate_AccountsReceivableAdapter = (TextView) viewGroup.findViewById(R.id.tvCreationDate_AccountsReceivableAdapter);
 
-        tvId_AccountsReceivableAdapter.setText(String.format("ID: %s", list.get(position).getId()));
+        tvId_AccountsReceivableAdapter.setText(String.format("N°: %s", list.get(position).getId()));
         tvSaleId_AccountsReceivableAdapter.setText(String.format("N° Pedido: %s", list.get(position).getSale().getId()));
-        tvBusinessName_AccountsReceivableAdapter.setText(String.format("Razón social: %s", list.get(position).getSale().getClient().getPerson().getBusinessName()));
-        tvAmount_AccountsReceivableAdapter.setText(String.format("Saldo: S/ %s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
-        tvCreationDate_AccountsReceivableAdapter.setText(String.format("Fecha de emisión: %s",
+        tvBusinessName_AccountsReceivableAdapter.setText(String.format("Cliente: %s", list.get(position).getSale().getClient().getPerson().getBusinessName()));
+        tvCreationDate_AccountsReceivableAdapter.setText(String.format("Fec. emisión: %s",
                 MyDateTime.format(list.get(position).getDate(), MyDateTime.TYPE_DATE)));
+        tvAmount_AccountsReceivableAdapter.setText(String.format("Saldo: S/ %s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
 
         return viewGroup;
     }

@@ -116,6 +116,7 @@
     <string name="sales_value">Valor de ventas</string>
     <string name="total_sales">Total de ventas</string>
     <string name="balance">Saldo</string>
+    <string name="total_balance">Saldo total</string>
     <string name="collection_sheet_date">Fecha de planilla</string>
     <!--<string name="total_collection_sheet">Total planilla</string>-->
     <string name="quote_number">N° de cuota</string>
