@@ -19,8 +19,9 @@ public class CollectionSheetAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater layoutInflater;
     TextView tvId_CollectionSheetAdapter, tvSaleId_CollectionSheetAdapter,
-            tvBusinessName_CollectionSheetAdapter, tvBalance_CollectionSheetAdapter,
-            tvAmortization_CollectionSheetAdapter, tvCondition_CollectionSheetAdapter;
+            tvBusinessName_CollectionSheetAdapter, tvAmount_CollectionSheetAdapter,
+            tvAmortization_CollectionSheetAdapter, tvBalance_CollectionSheetAdapter,
+            tvCondition_CollectionSheetAdapter;
     List<CollectionSheetDetail> list;
 
     public CollectionSheetAdapter()
@@ -57,15 +58,17 @@ public class CollectionSheetAdapter extends BaseAdapter {
         tvId_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvId_CollectionSheetAdapter);
         tvSaleId_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvSaleId_CollectionSheetAdapter);
         tvBusinessName_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvBusinessName_CollectionSheetAdapter);
+        tvAmount_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvAmount_CollectionSheetAdapter);
         tvBalance_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvBalance_CollectionSheetAdapter);
         tvAmortization_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvAmortization_CollectionSheetAdapter);
         tvCondition_CollectionSheetAdapter = (TextView) viewGroup.findViewById(R.id.tvCondition_CollectionSheetAdapter);
 
-        tvId_CollectionSheetAdapter.setText(String.format("ID: %s", list.get(position).getCollectionSheet().getId()));
+        tvId_CollectionSheetAdapter.setText(String.format("N°: %s", list.get(position).getCollectionSheet().getId()));
         tvSaleId_CollectionSheetAdapter.setText(String.format("N° Pedido: %s", list.get(position).getSale().getId()));
-        tvBusinessName_CollectionSheetAdapter.setText(String.format("Razón social: %s", list.get(position).getSale().getClient().getPerson().getBusinessName()));
-        tvBalance_CollectionSheetAdapter.setText(String.format("Saldo: S/ %s", MyMath.toDecimal(list.get(position).getBalance(), 2)));
+        tvBusinessName_CollectionSheetAdapter.setText(String.format("Cliente: %s", list.get(position).getSale().getClient().getPerson().getBusinessName()));
+        tvAmount_CollectionSheetAdapter.setText(String.format("Total: S/ %s", MyMath.toDecimal(list.get(position).getAmount(), 2)));
         tvAmortization_CollectionSheetAdapter.setText(String.format("Amortización: S/ %s", MyMath.toDecimal(list.get(position).getAmortization(), 2)));
+        tvBalance_CollectionSheetAdapter.setText(String.format("Saldo: S/ %s", MyMath.toDecimal(list.get(position).getBalance(), 2)));
         tvCondition_CollectionSheetAdapter.setText(String.format("Condición: %s", list.get(position).getBalance() == 0.0F ? "CANCELADO" : "ADEUDA"));
 
         return viewGroup;
