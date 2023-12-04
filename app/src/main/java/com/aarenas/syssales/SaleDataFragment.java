@@ -102,7 +102,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
     //Parameters:
     private Bundle parameters;
-    private Configuration objConfiguration;
+    private Configuration objConfiguration, objConfigurationXUser;
     private User objUser;
     private Company objCompany;
     private Sale objSale = new Sale();
@@ -498,9 +498,37 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                             }
 
                             objSale.getClient().setStatus(ConstantData.CustomerStatus.DELINQUENT);
-                            Utilities.showMessage(getActivity(), new String[]{
+                            /*Utilities.showMessage(getActivity(), new String[]{
                                     getString(R.string.message_customer_delinqued),
                                     String.format("Total: S/ %s", MyMath.toDecimal(debtAmount, 2))});
+                            String message = TextUtils.join("\n", array);*/
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle(R.string.app_name);
+                            builder.setMessage(getString(R.string.message_customer_delinqued))
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    })
+                                    .setNegativeButton("Ver planilla...", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            if (objConfigurationXUser != null && objConfigurationXUser.isOptionAccountReceivable())
+                                            {
+                                                Intent activity = new Intent(getActivity(), CollectionSheetActivity.class);
+                                                activity.putExtras(parameters);
+                                                startActivity(activity);
+                                            }
+                                            else
+                                            {
+                                                Toast.makeText(getActivity(), R.string.message_unsupported_user, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                            AlertDialog dialog = builder.create();
+                            dialog.setCancelable(false);
+                            dialog.setCanceledOnTouchOutside(false);
+                            dialog.show();
                         }
 
                         if (objConfiguration != null && objConfiguration.isOptionCreditLine())
@@ -679,6 +707,10 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
             if (data.get("configuration") != null)
             {
                 this.objConfiguration = data.getParcelable("configuration");
+            }
+            if (data.get("configuration_user") != null)
+            {
+                this.objConfigurationXUser = data.getParcelable("configuration_user");
             }
             if (data.get("saleId") != null)
             {
