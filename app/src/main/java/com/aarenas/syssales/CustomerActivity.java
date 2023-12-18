@@ -551,13 +551,13 @@ public class CustomerActivity extends AppCompatActivity implements WebServices.O
         objCustomer.getPerson().setReference(etReference_Customer.getText().toString());
         objCustomer.getPerson().setPhone(etPhone_Customer.getText().toString());
         objCustomer.getPerson().setEmail(etEmail_Customer.getText().toString());
-
         if (objConfiguration != null && objConfiguration.isOptionVendors())
         {
             objCustomer.setBusinessLine(((SimpleClass<BusinessLine>)spBusinessLine_Customer.getSelectedItem()).getTag());
             objCustomer.setRoute(((SimpleClass<Route>)spRoute_Customer.getSelectedItem()).getTag());
             objCustomer.getRoute().setZone(((SimpleClass<Zone>)spZone_Customer.getSelectedItem()).getTag());
         }
+        objCustomer.setEnabled(true);
     }
 
     private void Save()
