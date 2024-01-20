@@ -1,6 +1,7 @@
 package com.aarenas.syssales;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -48,6 +49,10 @@ public class CreditSaleQuotesActivity extends AppCompatActivity implements WebSe
     Bundle parameters;
     CreditSale objCreditSale;
 
+    //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,14 +68,16 @@ public class CreditSaleQuotesActivity extends AppCompatActivity implements WebSe
         tvItemsCount_CreditSaleQuotesActivity = findViewById(R.id.tvItemsCount_CreditSaleQuotesActivity);
         gvData_CreditSaleQuotesActivity = findViewById(R.id.gvData_CreditSaleQuotesActivity);
 
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
+
         ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK)
                         {
-                            /*WebMethods objWebMethods = new WebMethods(CreditSaleQuotesActivity.this, CreditSaleQuotesActivity.this);
-                            objWebMethods.getCreditSaleQuotes(objCreditSale.getId());*/
+                            /*objWebMethods.getCreditSaleQuotes(objCreditSale.getId());*/
 
                             setResult(RESULT_OK, result.getData());
                             finish();
@@ -118,7 +125,6 @@ public class CreditSaleQuotesActivity extends AppCompatActivity implements WebSe
                             switch (menuItem.getItemId())
                             {
                                 case itemDelete:
-                                    WebMethods objWebMethods = new WebMethods(CreditSaleQuotesActivity.this, CreditSaleQuotesActivity.this);
                                     objWebMethods.deleteCreditSaleQuote(objCreditSale.getId(), objCreditSaleQuote.getQuoteNumber());
                                     break;
                                 default:
@@ -135,7 +141,6 @@ public class CreditSaleQuotesActivity extends AppCompatActivity implements WebSe
             }
         });
 
-        WebMethods objWebMethods = new WebMethods(this, this);
         objWebMethods.getCreditSaleQuotes(objCreditSale.getId());
     }
 
@@ -196,7 +201,6 @@ public class CreditSaleQuotesActivity extends AppCompatActivity implements WebSe
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

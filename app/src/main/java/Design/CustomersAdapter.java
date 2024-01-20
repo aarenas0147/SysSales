@@ -71,7 +71,7 @@ public class CustomersAdapter extends BaseAdapter {
         {
             tvVendor_CustomersAdapter.setText(String.format("Vendedor: %s", list.get(position).getEmployee().getPerson().getNames()));
         }
-        tvDocumentNumber_CustomersAdapter.setText(String.format("N° doc.: %s", list.get(position).getPerson().getDocumentNumber()));
+        tvDocumentNumber_CustomersAdapter.setText(String.format("N° documento: %s", list.get(position).getPerson().getDocumentNumber()));
 
         return viewGroup;
     }

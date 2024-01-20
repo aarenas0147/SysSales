@@ -94,11 +94,10 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     private TextInputEditText etCustomerId_SaleDataFragment, etCustomerDocumentNumber_SaleDataFragment,
             etCustomerBusinessName_SaleDataFragment, etCustomerAddress_SaleDataFragment,
             etIssueDate_SaleDataFragment, etExpiryDate_SaleDataFragment,
-            etSeller_SaleDataFragment, etSellerZone_SaleDataFragment, etSellerRoute_SaleDataFragment,
-            etCreditLineAmount_SaleDataFragment;
+            etSeller_SaleDataFragment, etSellerZone_SaleDataFragment, etSellerRoute_SaleDataFragment;
     private Spinner spVoucherType_SaleDataFragment, spPaymentCondition_SaleDataFragment, spPaymentMethod_SaleDataFragment;
     private ImageButton btnFindCustomer_SaleDataFragment, btnCustomers_SaleDataFragment, btnSalePaymentMethods_SaleDataFragment;
-    private LinearLayout lytVendorByCustomer_SaleDataFragment, lytCreditLineByCustomer_SaleDataFragment;
+    private LinearLayout lytVendorByCustomer_SaleDataFragment;
 
     //Parameters:
     private Bundle parameters;
@@ -108,18 +107,19 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     private Sale objSale = new Sale();
 
     //Activities result:
-    ActivityResultLauncher<Intent> resultLauncherCustomerAdd;
+    private ActivityResultLauncher<Intent> resultLauncherCustomerAdd;
 
     //Asynctask:
-    List<CreditSale> listCreditSaleByCustomer = null;
-    List<CreditLine> listCreditLineByCustomer = null;
+    private List<CreditSale> listCreditSaleByCustomer = null;
+    private List<CreditLine> listCreditLineByCustomer = null;
 
     //Variables:
+    private SharedPreferences preferences;
     private WebMethods objWebMethods;
     private Calendar issueDate = Calendar.getInstance();
     private Calendar expiryDate = Calendar.getInstance();
     private float balance = 0F;
-    private float debtAmount = 0F;
+    private float creditLineAmount = 0F, debtAmount = 0F;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +128,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         parameters = getArguments();
         LoadParameters(parameters);
 
+        preferences = getActivity().getSharedPreferences(getActivity().getPackageName() + "_preferences", Context.MODE_PRIVATE);
         objWebMethods = new WebMethods(getActivity(), SaleDataFragment.this);
     }
 
@@ -147,7 +148,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         etSeller_SaleDataFragment = rootView.findViewById(R.id.etSeller_SaleDataFragment);
         etSellerZone_SaleDataFragment = rootView.findViewById(R.id.etSellerZone_SaleDataFragment);
         etSellerRoute_SaleDataFragment = rootView.findViewById(R.id.etSellerRoute_SaleDataFragment);
-        etCreditLineAmount_SaleDataFragment = rootView.findViewById(R.id.etCreditLineAmount_SaleDataFragment);
         spVoucherType_SaleDataFragment = rootView.findViewById(R.id.spVoucherType_SaleDataFragment);
         spPaymentCondition_SaleDataFragment = rootView.findViewById(R.id.spPaymentCondition_SaleDataFragment);
         spPaymentMethod_SaleDataFragment = rootView.findViewById(R.id.spPaymentMethod_SaleDataFragment);
@@ -155,11 +155,9 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         btnCustomers_SaleDataFragment = rootView.findViewById(R.id.btnCustomers_SaleDataFragment);
         btnSalePaymentMethods_SaleDataFragment = rootView.findViewById(R.id.btnSalePaymentMethods_SaleDataFragment);
         lytVendorByCustomer_SaleDataFragment = rootView.findViewById(R.id.lytVendorByCustomer_SaleDataFragment);
-        lytCreditLineByCustomer_SaleDataFragment = rootView.findViewById(R.id.lytCreditLineByCustomer_SaleDataFragment);
 
         btnSalePaymentMethods_SaleDataFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCustomPaymentMethod() ? View.VISIBLE : View.GONE);
         lytVendorByCustomer_SaleDataFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionVendors() ? View.VISIBLE : View.GONE);
-        lytCreditLineByCustomer_SaleDataFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCreditLine() ? View.VISIBLE : View.GONE);
 
         ActivityResultLauncher<Intent> resultLauncherCustomer = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -511,11 +509,11 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
                                         }
                                     })
-                                    .setNegativeButton("Ver planilla...", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton("Ver pagos...", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             if (objConfigurationXUser != null && objConfigurationXUser.isOptionAccountReceivable())
                                             {
-                                                Intent activity = new Intent(getActivity(), CollectionSheetActivity.class);
+                                                Intent activity = new Intent(getActivity(), AccountsReceivableActivity.class);
                                                 activity.putExtras(parameters);
                                                 startActivity(activity);
                                             }
@@ -538,6 +536,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                         else
                         {
                             validatePaymentCondition();
+                            InteractionFragment();
                         }
                     }
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_CUSTOMER)
@@ -546,12 +545,12 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                         listCreditLineByCustomer = CreditLine.getList(jsonArray);
                         if (listCreditLineByCustomer != null && listCreditLineByCustomer.size() > 0)
                         {
-                            etCreditLineAmount_SaleDataFragment.setText(MyMath.toDecimal(
-                                    (debtAmount < listCreditLineByCustomer.get(0).getAmount() ?
-                                            listCreditLineByCustomer.get(0).getAmount() - debtAmount : 0F), 2));
+                            this.creditLineAmount = (debtAmount < listCreditLineByCustomer.get(0).getAmount() ?
+                                    listCreditLineByCustomer.get(0).getAmount() - debtAmount : 0F);
                         }
 
                         validatePaymentCondition();
+                        InteractionFragment();
                     }
                 }
                 else
@@ -658,7 +657,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     }
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_CUSTOMER)
                     {
-                        etCreditLineAmount_SaleDataFragment.setText(MyMath.toDecimal(0F, 2));
+                        this.creditLineAmount = 0F;
 
                         validatePaymentCondition();
                     }
@@ -679,7 +678,6 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getActivity().getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();
@@ -787,6 +785,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
             objects.put("sale", objSale);
         }
         //objects.put("balance", balance);
+        objects.put("creditLineAmount", this.creditLineAmount);
 
         mListener.onFragmentInteraction(objects, fragment_1);
     }

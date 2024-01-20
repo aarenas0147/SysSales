@@ -1,6 +1,7 @@
 package com.aarenas.syssales;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,6 +32,7 @@ import Data.MyMath;
 import Data.MyPdf;
 import Data.Objects.Company;
 import Data.Objects.Configuration;
+import Data.Objects.CreditLine;
 import Data.Objects.Sale;
 import Data.Objects.User;
 import Data.Utilities;
@@ -48,8 +51,10 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
 
     //Controls:
     private Button btnCalculator_SaleSummaryFragment, btnSend_SaleSummaryFragment, btnExit_SaleSummaryFragment;
-    private TextInputEditText etSaleValue_SaleSummaryFragment, etSubtotal_SaleSummaryFragment,
+    private TextInputEditText etCreditLineAmount_SaleSummaryFragment, etCreditLineBalance_SaleSummaryFragment,
+            etSaleValue_SaleSummaryFragment, etSubtotal_SaleSummaryFragment,
             etTaxes_SaleSummaryFragment, etTotal_SaleSummaryFragment;
+    private LinearLayout lytCreditLine_SaleSummaryFragment;
 
     //Parameters:
     private Bundle parameters;
@@ -58,7 +63,10 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
     private Company objCompany;
     Sale objSale = new Sale();
 
+    private float debtAmount, creditLineAmount;
+
     //Variables:
+    private SharedPreferences preferences;
     private WebMethods objWebMethods;
 
     @Override
@@ -68,6 +76,7 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
         parameters = getArguments();
         LoadParameters(parameters);
 
+        preferences = getActivity().getSharedPreferences(getActivity().getPackageName() + "_preferences", Context.MODE_PRIVATE);
         objWebMethods = new WebMethods(getActivity(), SaleSummaryFragment.this);
     }
 
@@ -80,10 +89,15 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
         btnCalculator_SaleSummaryFragment = rootView.findViewById(R.id.btnCalculator_SaleSummaryFragment);
         btnSend_SaleSummaryFragment = rootView.findViewById(R.id.btnSend_SaleSummaryFragment);
         btnExit_SaleSummaryFragment = rootView.findViewById(R.id.btnExit_SaleSummaryFragment);
+        etCreditLineAmount_SaleSummaryFragment = rootView.findViewById(R.id.etCreditLineAmount_SaleSummaryFragment);
+        etCreditLineBalance_SaleSummaryFragment = rootView.findViewById(R.id.etCreditLineBalance_SaleSummaryFragment);
         etSaleValue_SaleSummaryFragment = rootView.findViewById(R.id.etSaleValue_SaleSummaryFragment);
         etSubtotal_SaleSummaryFragment = rootView.findViewById(R.id.etSubtotal_SaleSummaryFragment);
         etTaxes_SaleSummaryFragment = rootView.findViewById(R.id.etTaxes_SaleSummaryFragment);
         etTotal_SaleSummaryFragment = rootView.findViewById(R.id.etTotal_SaleSummaryFragment);
+        lytCreditLine_SaleSummaryFragment = rootView.findViewById(R.id.lytCreditLine_SaleSummaryFragment);
+
+        lytCreditLine_SaleSummaryFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCreditLine() ? View.VISIBLE : View.GONE);
 
         btnCalculator_SaleSummaryFragment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,7 +172,6 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
                             {
                                 String errorMessage = (String)array.getProperty(2);
 
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                                 String customErrorMessage = String.format("%s%s", message,
                                         (errorMessage != null && !errorMessage.isEmpty()
                                                 && preferences.getBoolean("depuration", false) ? String.format("\nError:\n%s", errorMessage) : ""));
@@ -221,7 +234,6 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getActivity().getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();
@@ -254,13 +266,17 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
 
     private void Load()
     {
-        etSaleValue_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getSaleValue(), 2));
-        etSubtotal_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getSubTotal() != null ?
-                this.objSale.getSubTotal() : 0F, 2));
-        etTaxes_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getTax() != null ?
-                this.objSale.getTax() : 0F, 2));
-        etTotal_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getTotal() != null ?
-                this.objSale.getTotal() : 0F, 2));
+        if (this.objSale != null)
+        {
+            etSaleValue_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getSaleValue(), 2));
+            etSubtotal_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getSubTotal(), 2));
+            etTaxes_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getTax(), 2));
+            etTotal_SaleSummaryFragment.setText(MyMath.toDecimal(this.objSale.getTotal(), 2));
+
+            etCreditLineAmount_SaleSummaryFragment.setText(MyMath.toDecimal(this.creditLineAmount, 2));
+            etCreditLineBalance_SaleSummaryFragment.setText(MyMath.toDecimal(this.creditLineAmount -
+                    this.objSale.getTotal(), 2));
+        }
     }
 
     public void UpdateData(HashMap<String, Object> objects, int id)
@@ -296,6 +312,16 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
                             Load();
                         }
                     }
+                }
+            }
+
+            if (objects.get("creditLineAmount") != null)
+            {
+                this.creditLineAmount = Float.parseFloat(objects.get("creditLineAmount").toString());
+
+                if (getView() != null)
+                {
+                    Load();
                 }
             }
         }

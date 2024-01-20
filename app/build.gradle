@@ -18,8 +18,8 @@ android {
         targetSdk 34
         minSdk 16
         multiDexEnabled true
-        versionCode 16
-        versionName "2.6.0"
+        versionCode 17
+        versionName "2.7.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,10 +59,10 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment:2.7.5'
-    implementation 'androidx.navigation:navigation-ui:2.7.5'
+    implementation 'androidx.navigation:navigation-fragment:2.7.6'
+    implementation 'androidx.navigation:navigation-ui:2.7.6'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.multidex:multidex:2.0.1'

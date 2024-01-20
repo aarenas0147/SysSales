@@ -71,11 +71,12 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
     Sale objSale = new Sale();
 
     //Asynchronous data:
-    List<SaleDetail> list;
+    private List<SaleDetail> list;
 
     //Variables:
-    WebMethods objWebMethods;
-    ActivityResultLauncher<Intent> resultLauncher;
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
+    private ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
         parameters = getArguments();
         LoadParameters(parameters);
 
+        preferences = getActivity().getSharedPreferences(getActivity().getPackageName() + "_preferences", Context.MODE_PRIVATE);
         objWebMethods = new WebMethods(getActivity(), this);
     }
 
@@ -128,26 +130,25 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                             final int itemEdit = R.id.action_edit_item;
                             final int itemDelete = R.id.action_delete_item;
 
-                            switch (menuItem.getItemId())
+                            if (menuItem.getItemId() == itemEdit)
                             {
-                                case itemEdit:
-                                    Intent intent = new Intent(getActivity().getApplicationContext(), SaleDetailActivity.class);
-                                    intent.putExtra("user", objUser);
-                                    intent.putExtra("company", objCompany);
-                                    intent.putExtra("sale", objSale);
-                                    intent.putExtra("product", objSaleDetail.getProduct());
-                                    intent.putExtra("quantity", objSaleDetail.getQuantity());
-                                    intent.putExtra(SaleDetailActivity.CONST_RESULT, SaleDetailActivity.RESULT_MODIFY);
-                                    resultLauncher.launch(intent);
-                                    break;
-                                case itemDelete:
-                                    objWebMethods.deleteItem(objSale.getId(), objSaleDetail.getProduct().getDecimalUnit(),
-                                            (String)objSale.getVoucherType().getId(), objSaleDetail.getQuantity());
-                                    break;
-                                default:
-                                    break;
+                                Intent intent = new Intent(getActivity().getApplicationContext(), SaleDetailActivity.class);
+                                intent.putExtra("user", objUser);
+                                intent.putExtra("company", objCompany);
+                                intent.putExtra("sale", objSale);
+                                intent.putExtra("product", objSaleDetail.getProduct());
+                                intent.putExtra("quantity", objSaleDetail.getQuantity());
+                                intent.putExtra(SaleDetailActivity.CONST_RESULT, SaleDetailActivity.RESULT_MODIFY);
+                                resultLauncher.launch(intent);
+                                return true;
                             }
-                            return true;
+                            else if (menuItem.getItemId() == itemDelete)
+                            {
+                                objWebMethods.deleteItem(objSale.getId(), objSaleDetail.getProduct().getDecimalUnit(),
+                                        (String)objSale.getVoucherType().getId(), objSaleDetail.getQuantity());
+                                return true;
+                            }
+                            return false;
                         }
                     });
 
@@ -294,7 +295,6 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getActivity().getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

@@ -2,6 +2,7 @@ package com.aarenas.syssales;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ public class CreditSaleQuoteActivity extends AppCompatActivity implements WebSer
     CreditSale objCreditSale;
 
     //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
     CreditSaleQuote objCreditSaleQuote;
 
     @Override
@@ -58,6 +61,9 @@ public class CreditSaleQuoteActivity extends AppCompatActivity implements WebSer
         etBalance_CreditSaleQuote = findViewById(R.id.etBalance_CreditSaleQuote);
         etCreationDate_CreditSaleQuote = findViewById(R.id.etCreationDate_CreditSaleQuote);
         btnAccept_CreditSaleQuote = findViewById(R.id.btnAccept_CreditSaleQuote);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         etPayment_CreditSaleQuote.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,7 +92,6 @@ public class CreditSaleQuoteActivity extends AppCompatActivity implements WebSer
 
                     if (payment > 0.0F)
                     {
-                        WebMethods objWebMethods = new WebMethods(CreditSaleQuoteActivity.this, CreditSaleQuoteActivity.this);
                         objWebMethods.saveCreditSaleQuote(objCreditSale.getId(), objCreditSaleQuote.getQuoteNumber(),
                                 objCreditSale.getSale().getClient().getId(), payment, etCreationDate_CreditSaleQuote.getText().toString());
                     }
@@ -98,7 +103,6 @@ public class CreditSaleQuoteActivity extends AppCompatActivity implements WebSer
         etBalance_CreditSaleQuote.setText(MyMath.toDecimal(objCreditSale.getAmount(), 2));
         etCreationDate_CreditSaleQuote.setText(MyDateTime.format(new Date(), MyDateTime.TYPE_DATE));
 
-        WebMethods objWebMethods = new WebMethods(this, this);
         objWebMethods.newCreditSaleQuote(objCreditSale.getId());
     }
 
@@ -158,7 +162,6 @@ public class CreditSaleQuoteActivity extends AppCompatActivity implements WebSer
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

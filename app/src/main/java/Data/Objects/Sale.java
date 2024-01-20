@@ -22,7 +22,7 @@ public class Sale implements Parcelable {
     private Date IssueDate, ExpirationDate, CreationDate;
     private PaymentCondition PaymentCondition;
     private PaymentMethod PaymentMethod;
-    private Float SaleValue, Interest, Discount, SubTotal, Tax, Total;
+    private float SaleValue, Interest, Discount, SubTotal, Tax, Total;
     private Boolean State;
 
     public Sale() {
@@ -41,18 +41,12 @@ public class Sale implements Parcelable {
         CreationDate = tmpCreationDate != 0 ? new Date(tmpCreationDate) : null;
         PaymentCondition = in.readParcelable(Data.Objects.PaymentCondition.class.getClassLoader());
         PaymentMethod = in.readParcelable(Data.Objects.PaymentMethod.class.getClassLoader());
-        float tmpSaleValue = in.readFloat();
-        SaleValue = tmpSaleValue != 0 ? tmpSaleValue : null;
-        float tmpInterest = in.readFloat();
-        Interest = tmpInterest != 0 ? tmpInterest : null;
-        float tmpDiscount = in.readFloat();
-        Discount = tmpDiscount != 0 ? tmpDiscount : null;
-        float tmpSubTotal = in.readFloat();
-        SubTotal = tmpSubTotal != 0 ? tmpSubTotal : null;
-        float tmpTax = in.readFloat();
-        Tax = tmpTax != 0 ? tmpTax : null;
-        float tmpTotal = in.readFloat();
-        Total = tmpTotal != 0 ? tmpTotal : null;
+        SaleValue = in.readFloat();
+        Interest = in.readFloat();
+        Discount = in.readFloat();
+        SubTotal = in.readFloat();
+        Tax = in.readFloat();
+        Total = in.readFloat();
         byte tmpState = in.readByte();
         State = tmpState == 0 ? null : tmpState == 1;
     }
@@ -141,51 +135,51 @@ public class Sale implements Parcelable {
         PaymentMethod = paymentMethod;
     }
 
-    public Float getSaleValue() {
+    public float getSaleValue() {
         return SaleValue;
     }
 
-    public void setSaleValue(Float saleValue) {
+    public void setSaleValue(float saleValue) {
         SaleValue = saleValue;
     }
 
-    public Float getInterest() {
+    public float getInterest() {
         return Interest;
     }
 
-    public void setInterest(Float interest) {
+    public void setInterest(float interest) {
         Interest = interest;
     }
 
-    public Float getDiscount() {
+    public float getDiscount() {
         return Discount;
     }
 
-    public void setDiscount(Float discount) {
+    public void setDiscount(float discount) {
         Discount = discount;
     }
 
-    public Float getSubTotal() {
+    public float getSubTotal() {
         return SubTotal;
     }
 
-    public void setSubTotal(Float subTotal) {
+    public void setSubTotal(float subTotal) {
         SubTotal = subTotal;
     }
 
-    public Float getTax() {
+    public float getTax() {
         return Tax;
     }
 
-    public void setTax(Float tax) {
+    public void setTax(float tax) {
         Tax = tax;
     }
 
-    public Float getTotal() {
+    public float getTotal() {
         return Total;
     }
 
-    public void setTotal(Float total) {
+    public void setTotal(float total) {
         Total = total;
     }
 
@@ -213,12 +207,12 @@ public class Sale implements Parcelable {
         parcel.writeLong(CreationDate != null ? CreationDate.getTime() : 0);
         parcel.writeParcelable(PaymentCondition, i);
         parcel.writeParcelable(PaymentMethod, i);
-        parcel.writeFloat(SaleValue != null ? SaleValue : 0F);
-        parcel.writeFloat(Interest != null ? Interest : 0F);
-        parcel.writeFloat(Discount != null ? Discount : 0F);
-        parcel.writeFloat(SubTotal != null ? SubTotal : 0F);
-        parcel.writeFloat(Tax != null ? Tax : 0F);
-        parcel.writeFloat(Total != null ? Total : 0F);
+        parcel.writeFloat(SaleValue);
+        parcel.writeFloat(Interest);
+        parcel.writeFloat(Discount);
+        parcel.writeFloat(SubTotal);
+        parcel.writeFloat(Tax);
+        parcel.writeFloat(Total);
         parcel.writeByte((byte) (State == null ? 0 : State ? 1 : 2));
     }
 

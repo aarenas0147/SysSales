@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Presentation;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,20 +50,21 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
     public static final int RESULT_MODIFY = 3;
 
     //Controls:
-    TextInputEditText etProductId_SaleDetail, etDescription_SaleDetail, etStock_SaleDetail,
+    private TextInputEditText etProductId_SaleDetail, etDescription_SaleDetail, etStock_SaleDetail,
             etQuantity_SaleDetail, etSellingPrice_SaleDetail, etLimitPrice_SaleDetail,
             etCreditPrice_SaleDetail, etAmount_SaleDetail;
-    Spinner spMeasureUnit_SaleDetail;
-    Button btnAccept_SaleDetail;
+    private Spinner spMeasureUnit_SaleDetail;
+    private Button btnAccept_SaleDetail;
 
     //Parameters:
-    int resultType;
+    private int resultType;
     private Bundle parameters;
     private User objUser;
     private Company objCompany;
     SaleDetail objSaleDetail = new SaleDetail();
 
     //Variables:
+    private SharedPreferences preferences;
     private WebMethods objWebMethods;
 
     @Override
@@ -78,8 +80,6 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
         parameters = getIntent().getExtras();
         LoadParameters(parameters);
 
-        objWebMethods = new WebMethods(this, this);
-
         etProductId_SaleDetail = findViewById(R.id.etProductId_SaleDetail);
         etDescription_SaleDetail = findViewById(R.id.etDescription_SaleDetail);
         etStock_SaleDetail = findViewById(R.id.etStock_SaleDetail);
@@ -90,6 +90,9 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
         etAmount_SaleDetail = findViewById(R.id.etAmount_SaleDetail);
         spMeasureUnit_SaleDetail = findViewById(R.id.spMeasureUnit_SaleDetail);
         btnAccept_SaleDetail = findViewById(R.id.btnAccept_SaleDetail);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         etQuantity_SaleDetail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -208,11 +211,10 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            //onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -314,7 +316,6 @@ public class SaleDetailActivity extends AppCompatActivity implements WebServices
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

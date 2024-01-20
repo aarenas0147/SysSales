@@ -1,5 +1,6 @@
 package com.aarenas.syssales;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,7 +40,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
+            //onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -67,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onPause() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getActivity().getPackageName() + "_preferences", Context.MODE_PRIVATE);
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
             super.onPause();
         }
@@ -75,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onResume() {
             super.onResume();
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getActivity().getPackageName() + "_preferences", Context.MODE_PRIVATE);
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
 

@@ -1,5 +1,6 @@
 package com.aarenas.syssales;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -58,8 +59,8 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
     //Variables:
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private ActivityResultLauncher<Intent> resultLauncher;
     private WebMethods objWebMethods;
+    private ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,9 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
 
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
+
         imgBackground_Login = findViewById(R.id.imgBackground_Login);
         imgLogo_Login = findViewById(R.id.imgLogo_Login);
         etUsername_Login = findViewById(R.id.etUsername_Login);
@@ -79,8 +83,6 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
         chkRememberMe_Login = findViewById(R.id.chkRememberMe_Login);
         btnLogin_Login = findViewById(R.id.btnLogin_Login);
         tvAppVersion_Login = findViewById(R.id.tvAppVersion_Login);
-
-        objWebMethods = new WebMethods(this, this);
         imgLogo_Login.setImageResource(R.drawable.icon);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
@@ -122,8 +124,6 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
                         recreate();
                     }
                 });
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         load();
     }
@@ -226,7 +226,6 @@ public class LoginActivity extends AppCompatActivity implements WebServices.OnRe
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

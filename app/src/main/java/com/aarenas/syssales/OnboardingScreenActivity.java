@@ -3,6 +3,7 @@ package com.aarenas.syssales;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,14 +32,13 @@ public class OnboardingScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        //setTheme(R.style.Theme_SysSales_NoActionBar);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding_screen);
 
         container = findViewById(R.id.container);
         btnNext_OnboardingScreen = findViewById(R.id.btnNext_OnboardingScreen);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
 
         btnNext_OnboardingScreen.setOnClickListener(new View.OnClickListener() {
             @Override

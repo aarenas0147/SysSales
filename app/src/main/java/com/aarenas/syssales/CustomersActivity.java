@@ -53,13 +53,17 @@ public class CustomersActivity extends AppCompatActivity implements WebServices.
     private ActivityCustomersBinding binding;
 
     //Controls:
-    SearchView searchView;
-    GridView gvData_Customers;
+    private SearchView searchView;
+    private GridView gvData_Customers;
 
     //Parameters:
-    Bundle parameters;
-    int resultType;
-    Configuration objConfiguration;
+    private Bundle parameters;
+    private int resultType;
+    private Configuration objConfiguration;
+
+    //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,9 @@ public class CustomersActivity extends AppCompatActivity implements WebServices.
         setSupportActionBar(binding.toolbar);
 
         gvData_Customers = (GridView) findViewById(R.id.gvData_Customers);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         binding.fabAddCustomersActivity.setVisibility(objConfiguration != null && objConfiguration.isOptionNewCustomer() ? View.VISIBLE : View.GONE);
 
@@ -195,7 +202,6 @@ public class CustomersActivity extends AppCompatActivity implements WebServices.
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && query.trim().length() > 0)
                 {
-                    WebMethods objWebMethods = new WebMethods(CustomersActivity.this, CustomersActivity.this);
                     objWebMethods.getCustomersByBusinessName(query);
                 }
 
@@ -221,8 +227,7 @@ public class CustomersActivity extends AppCompatActivity implements WebServices.
             public boolean onClose() {
                 if (searchView.getQuery().length() == 0)
                 {
-                    /*WebMethods objWebMethods = new WebMethods(CustomersActivity.this, CustomersActivity.this);
-                    objWebMethods.getCustomers();*/
+                    /*objWebMethods.getCustomers();*/
                     gvData_Customers.setAdapter(null);
                 }
 
@@ -279,7 +284,6 @@ public class CustomersActivity extends AppCompatActivity implements WebServices.
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();
@@ -309,7 +313,6 @@ public class CustomersActivity extends AppCompatActivity implements WebServices.
 
     private void Load()
     {
-        /*WebMethods objWebMethods = new WebMethods(this, this);
-        objWebMethods.getCustomers();*/
+        /*objWebMethods.getCustomers();*/
     }
 }

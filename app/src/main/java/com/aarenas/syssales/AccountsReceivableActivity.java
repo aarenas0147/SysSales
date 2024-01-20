@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,13 +39,17 @@ public class AccountsReceivableActivity extends AppCompatActivity implements Web
     private ActivityAccountsReceivableBinding binding;
 
     //Controls:
-    TextInputEditText etBalance_AccountsReceivableActivity;
-    TextView tvItemsCount_AccountsReceivableActivity;
-    GridView gvData_AccountsReceivableActivity;
+    private TextInputEditText etBalance_AccountsReceivableActivity;
+    private TextView tvItemsCount_AccountsReceivableActivity;
+    private GridView gvData_AccountsReceivableActivity;
 
     //Parameters:
-    Bundle parameters;
-    User objUser;
+    private Bundle parameters;
+    private User objUser;
+
+    //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +67,15 @@ public class AccountsReceivableActivity extends AppCompatActivity implements Web
         tvItemsCount_AccountsReceivableActivity = findViewById(R.id.tvItemsCount_AccountsReceivableActivity);
         gvData_AccountsReceivableActivity = findViewById(R.id.gvData_SalesActivity);
 
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
+
         ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK)
                         {
-                            WebMethods objWebMethods = new WebMethods(AccountsReceivableActivity.this, AccountsReceivableActivity.this);
                             objWebMethods.getTotalAmountCreditSales(objUser.getEmployee().getId());
                         }
                     }
@@ -100,7 +107,6 @@ public class AccountsReceivableActivity extends AppCompatActivity implements Web
             }
         });
 
-        WebMethods objWebMethods = new WebMethods(this, this);
         objWebMethods.getTotalAmountCreditSales(objUser.getEmployee().getId());
     }
 
@@ -117,7 +123,6 @@ public class AccountsReceivableActivity extends AppCompatActivity implements Web
                         Float total = Float.parseFloat(result.getResult().toString());
                         etBalance_AccountsReceivableActivity.setText(MyMath.toDecimal(total, 2));
 
-                        WebMethods objWebMethods = new WebMethods(this, this);
                         objWebMethods.getCreditSales(objUser.getEmployee().getId());
                     }
                     else if (processId == WebMethods.TYPE_LIST_CREDIT_SALES)
@@ -163,7 +168,6 @@ public class AccountsReceivableActivity extends AppCompatActivity implements Web
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

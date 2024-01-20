@@ -2,6 +2,7 @@ package com.aarenas.syssales;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,6 +36,7 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
     private Sale objSale;
 
     //Variables:
+    private SharedPreferences preferences;
     private WebMethods objWebMethods;
 
     @Override
@@ -45,6 +47,7 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
         parameters = getIntent().getExtras();
         LoadParameters(parameters);
 
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
         objWebMethods = new WebMethods(this, this);
 
         gvData_SaleDetailsActivity = findViewById(R.id.gvData_SaleDetailsActivity);
@@ -87,7 +90,6 @@ public class SaleDetailsActivity extends AppCompatActivity implements WebService
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

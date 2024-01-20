@@ -1,9 +1,12 @@
 package com.aarenas.syssales;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
     //Constants:
@@ -21,13 +26,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     private static final int SPLASH_SCREEN_DELAY = 1000;
 
     //Controls:
-    ImageView imgLogo_SplashScreenActivity;
-    TextView tvAppName_SplashScreenActivity;
-    ProgressBar progressBar_SplashScreenActivity;
+    private ImageView imgLogo_SplashScreenActivity;
+    private TextView tvAppName_SplashScreenActivity;
+    private ProgressBar progressBar_SplashScreenActivity;
 
     //Variables:
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         ObjectAnimator.ofInt(progressBar_SplashScreenActivity, "progress", 100)
                 .setDuration(SPLASH_SCREEN_DELAY).start();
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);;
 
         defaultSkin();
 
@@ -62,11 +67,13 @@ public class SplashScreenActivity extends AppCompatActivity {
                 finish();
             };
         }, SPLASH_SCREEN_DELAY);
-    }
 
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+            }
+        });
     }
 
     private void defaultSkin()

@@ -57,7 +57,11 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
     private Bundle parameters;
     private User objUser;
     private Company objCompany;
-    int resultType;
+    private int resultType;
+
+    //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,9 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
         setSupportActionBar(binding.toolbar);
 
         gvData_Products = (GridView) findViewById(R.id.gvData_Products);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,10 +144,8 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && query.trim().length() > 0)
                 {
-                    WebMethods objWebMethods = new WebMethods(ProductsActivity.this, ProductsActivity.this);
                     objWebMethods.getProductsByDescription(query, objCompany.getId(), objUser.getEmployee().getOutlet().getId());
 
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean autocomplete_search = preferences.getBoolean("autocomplete_search", false);
                     if (autocomplete_search)
                     {
@@ -172,10 +177,8 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
             public boolean onClose() {
                 if (searchView.getQuery().length() == 0)
                 {
-                    WebMethods objWebMethods = new WebMethods(ProductsActivity.this, ProductsActivity.this);
                     objWebMethods.getProductsByDescription("", objCompany.getId(), objUser.getEmployee().getOutlet().getId());
 
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean autocomplete_search = preferences.getBoolean("autocomplete_search", false);
                     if (autocomplete_search)
                     {
@@ -189,7 +192,6 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
             }
         });
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean autocomplete_search = preferences.getBoolean("autocomplete_search", false);
         if (autocomplete_search)
         {
@@ -204,7 +206,6 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
 
         if (searchView.getQuery() == null || searchView.getQuery().length() == 0)
         {
-            WebMethods objWebMethods = new WebMethods(this, this);
             objWebMethods.getProductsByDescription("", objCompany.getId(), objUser.getEmployee().getOutlet().getId());
         }
 
@@ -256,7 +257,6 @@ public class ProductsActivity extends AppCompatActivity implements WebServices.O
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

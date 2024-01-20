@@ -8,6 +8,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -16,10 +17,12 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.aarenas.syssales.databinding.ActivitySaleBinding;
@@ -36,6 +39,7 @@ import Connection.WebMethods;
 import Connection.WebServices;
 import Data.Objects.Company;
 import Data.Objects.User;
+import Data.Utilities;
 
 public class SaleActivity extends FragmentActivity implements SaleDataFragment.OnFragmentInteractionListener,
         SaleDetailsFragment.OnFragmentInteractionListener{
@@ -70,27 +74,50 @@ public class SaleActivity extends FragmentActivity implements SaleDataFragment.O
         viewPager = binding.viewPager;
         pagerAdapter = new FragmentAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(TAB_TITLES.length);
         TabLayout tabs = binding.tabs;
         new TabLayoutMediator(tabs, viewPager, (tab, position) -> tab.setText(TAB_TITLES[position])).attach();
 
-        FloatingActionButton fab = binding.fab;
-        fab.setOnClickListener(new View.OnClickListener() {
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                Utilities.clearFocus(SaleActivity.this);
+            }
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (viewPager.getCurrentItem() == 0) {
+                    this.setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+
+                } else {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+                }
             }
         });
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
             super.onBackPressed();
         } else {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
-    }
+    }*/
 
     @Override
     public void onFragmentInteraction(HashMap<String, Object> objects, int id) {
@@ -127,14 +154,14 @@ public class SaleActivity extends FragmentActivity implements SaleDataFragment.O
             Fragment fragment;
             switch (position)
             {
+                case 0:
+                    fragment = fragment1;
+                    break;
                 case 1:
                     fragment = fragment2;
                     break;
-                case 2:
-                    fragment = fragment3;
-                    break;
                 default:
-                    fragment = fragment1;
+                    fragment = fragment3;
                     break;
             }
             return fragment;

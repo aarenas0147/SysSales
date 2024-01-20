@@ -1,6 +1,7 @@
 package com.aarenas.syssales;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -46,6 +47,8 @@ public class CollectionSheetActivity extends AppCompatActivity implements WebSer
     User objUser;
 
     //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
     Calendar collectionSheetDate = Calendar.getInstance();
 
     @Override
@@ -64,6 +67,9 @@ public class CollectionSheetActivity extends AppCompatActivity implements WebSer
         etTotalCollectionSales_CollectionSheetActivity = findViewById(R.id.etTotalCollectionSales_CollectionSheetActivity);
         tvItemsCount_CollectionSheetActivity = findViewById(R.id.tvItemsCount_CollectionSheetActivity);
         gvData_CollectionSheetActivity = findViewById(R.id.gvData_CollectionSheetActivity);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +94,6 @@ public class CollectionSheetActivity extends AppCompatActivity implements WebSer
                         String date = MyDateTime.format(collectionSheetDate.getTime(), MyDateTime.TYPE_DATE);
                         etCollectionSheetDate_CollectionSheetActivity.setText(date);
 
-                        WebMethods objWebMethods = new WebMethods(CollectionSheetActivity.this, CollectionSheetActivity.this);
                         objWebMethods.getSheet(date, objUser.getEmployee().getId());
                     }
                 }, collectionSheetDate.get(Calendar.YEAR), collectionSheetDate.get(Calendar.MONTH),
@@ -102,7 +107,6 @@ public class CollectionSheetActivity extends AppCompatActivity implements WebSer
                 MyDateTime.format(MyDateTime.getCurrentDatetime(), MyDateTime.TYPE_DATE));
         etTotalCollectionSales_CollectionSheetActivity.setText(MyMath.toDecimal(0F, 2));
 
-        WebMethods objWebMethods = new WebMethods(this, this);
         objWebMethods.getSheet(etCollectionSheetDate_CollectionSheetActivity.getText().toString(), objUser.getEmployee().getId());
     }
 
@@ -161,7 +165,6 @@ public class CollectionSheetActivity extends AppCompatActivity implements WebSer
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

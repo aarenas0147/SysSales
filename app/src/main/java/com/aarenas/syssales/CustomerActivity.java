@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -69,9 +70,11 @@ public class CustomerActivity extends AppCompatActivity implements WebServices.O
     int actionType;
 
     //Variables:
-    String[] list_DocumentTypes = {"DNI", "RUC", "OTRO"};
+    private String[] list_DocumentTypes = {"DNI", "RUC", "OTRO"};
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
+
     Customer objCustomer;
-    WebMethods objWebMethods;
     boolean isLoading = false;
 
     @Override
@@ -106,9 +109,10 @@ public class CustomerActivity extends AppCompatActivity implements WebServices.O
         btnAccept_Customer = (Button) findViewById(R.id.btnAccept_Customer);
         lytVendorByCustomer_Customer = (LinearLayout) findViewById(R.id.lytVendorByCustomer_Customer);
 
-        lytVendorByCustomer_Customer.setVisibility(objConfiguration != null && objConfiguration.isOptionVendors() ? View.VISIBLE : View.GONE);
-
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
         objWebMethods = new WebMethods(this, this);
+
+        lytVendorByCustomer_Customer.setVisibility(objConfiguration != null && objConfiguration.isOptionVendors() ? View.VISIBLE : View.GONE);
 
         etDocumentNumber_Customer.addTextChangedListener(new TextWatcher() {
             @Override
@@ -229,7 +233,8 @@ public class CustomerActivity extends AppCompatActivity implements WebServices.O
         switch (item.getItemId())
         {
             case android.R.id.home:
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
+                //onBackPressed();
                 return true;
         }
 
@@ -392,7 +397,6 @@ public class CustomerActivity extends AppCompatActivity implements WebServices.O
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ?
                     e.getMessage() :
                     getString(R.string.message_web_services_error);

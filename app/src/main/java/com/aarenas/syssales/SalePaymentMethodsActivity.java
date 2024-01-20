@@ -1,12 +1,14 @@
 package com.aarenas.syssales;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -57,6 +59,8 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
     Sale objSale = new Sale();
 
     //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
     float balance;
 
     @Override
@@ -74,6 +78,9 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
         etTotal_PaymentMethodsBySale = (TextInputEditText) findViewById(R.id.etTotal_PaymentMethodsBySale);
         etBalance_PaymentMethodsBySale = (TextInputEditText) findViewById(R.id.etBalance_PaymentMethodsBySale);
         gvData_PaymentMethodsBySale = (GridView) findViewById(R.id.gvData_PaymentMethodsBySale);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +100,6 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK)
                         {
-                            WebMethods objWebMethods = new WebMethods(SalePaymentMethodsActivity.this, SalePaymentMethodsActivity.this);
                             objWebMethods.getSalePaymentMethods(objSale.getId(), objCompany.getId());
                         }
                     }
@@ -136,7 +142,6 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
                                 switch (menuItem.getItemId())
                                 {
                                     case itemDelete:
-                                        WebMethods objWebMethods = new WebMethods(SalePaymentMethodsActivity.this, SalePaymentMethodsActivity.this);
                                         objWebMethods.deleteSalePaymentMethod(objSale.getId(),
                                                 objSalePaymentMethod.getPaymentMethod().getId(), objCompany.getId());
                                         break;
@@ -155,19 +160,30 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
             }
         });
 
-        WebMethods objWebMethods = new WebMethods(this, this);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent result = new Intent();
+                result.putExtra("balance", balance);
+                setResult(RESULT_OK, result);
+
+                this.setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
         objWebMethods.getTempSaleHeader(objSale.getId(), objCompany.getId());
         objWebMethods.getSalePaymentMethods(objSale.getId(), objCompany.getId());
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         Intent result = new Intent();
         result.putExtra("balance", balance);
         setResult(RESULT_OK, result);
 
         super.onBackPressed();
-    }
+    }*/
 
     @Override
     public void processFinish(WebServices.Result result, int processId) {
@@ -218,7 +234,6 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
                         {
                             Toast.makeText(getApplicationContext(), R.string.message_changes_performed_successfully, Toast.LENGTH_SHORT).show();
 
-                            WebMethods objWebMethods = new WebMethods(SalePaymentMethodsActivity.this, SalePaymentMethodsActivity.this);
                             objWebMethods.getSalePaymentMethods(objSale.getId(), objCompany.getId());
                         }
                     }
@@ -247,7 +262,6 @@ public class SalePaymentMethodsActivity extends AppCompatActivity implements Web
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

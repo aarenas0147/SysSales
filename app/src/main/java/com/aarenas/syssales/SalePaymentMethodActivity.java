@@ -2,6 +2,7 @@ package com.aarenas.syssales;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -51,6 +52,10 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
     Sale objSale = new Sale();
     float balance;
 
+    //Variables:
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,9 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
         spPaymentMethodDetail_PaymentMethodBySale = (Spinner) findViewById(R.id.spPaymentMethodDetail_PaymentMethodBySale);
         lytPaymentMethodDetail_PaymentMethodBySale = (LinearLayout) findViewById(R.id.lytPaymentMethodDetail_PaymentMethodBySale);
         btnAccept_PaymentMethodBySale = (Button) findViewById(R.id.btnAccept_PaymentMethodBySale);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         etAmount_PaymentMethodBySale.addTextChangedListener(new TextWatcher() {
             @Override
@@ -110,8 +118,6 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
                         if (amount <= Float.parseFloat(
                                 MyMath.toDecimal(objSalePaymentMethod.getAmount() + balance, 2)))
                         {
-                            WebMethods objWebMethods = new WebMethods(SalePaymentMethodActivity.this,
-                                    SalePaymentMethodActivity.this);
                             if (objSalePaymentMethod.getId() == null)
                             {
                                 objWebMethods.addSalePaymentMethod(objSale.getId(),
@@ -217,7 +223,6 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();
@@ -263,7 +268,6 @@ public class SalePaymentMethodActivity extends AppCompatActivity implements WebS
             etTotal_PaymentMethodBySale.setText(MyMath.toDecimal(this.objSalePaymentMethod.getTotal(), 2));
         }
 
-        WebMethods objWebMethods = new WebMethods(SalePaymentMethodActivity.this, SalePaymentMethodActivity.this);
         objWebMethods.getPaymentMethodDetails(objSalePaymentMethod.getPaymentMethod().getId());
     }
 

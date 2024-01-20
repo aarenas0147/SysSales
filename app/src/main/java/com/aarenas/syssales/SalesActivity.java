@@ -2,6 +2,7 @@ package com.aarenas.syssales;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -66,7 +67,8 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
     private Company objCompany;
 
     //Variables:
-    WebMethods objWebMethods;
+    private SharedPreferences preferences;
+    private WebMethods objWebMethods;
     Calendar saleDate = Calendar.getInstance();
 
     @Override
@@ -75,8 +77,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
 
         parameters = getIntent().getExtras();
         LoadParameters(parameters);
-
-        objWebMethods = new WebMethods(this, this);
 
         binding = ActivitySalesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -89,6 +89,9 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
         spVendor_SalesActivity = findViewById(R.id.spVendor_SalesActivity);
         tvItemsCount_SalesActivity = findViewById(R.id.tvItemsCount_AccountsReceivableActivity);
         gvData_SalesActivity = findViewById(R.id.gvData_SalesActivity);
+
+        preferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        objWebMethods = new WebMethods(this, this);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -368,7 +371,6 @@ public class SalesActivity extends AppCompatActivity implements WebServices.OnRe
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();

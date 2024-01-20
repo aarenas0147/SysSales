@@ -1,5 +1,6 @@
 package com.aarenas.syssales;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
     private Company objCompany;
 
     //Variables:
+    private SharedPreferences preferences;
     private WebMethods objWebMethods;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -154,16 +156,39 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
             }
         });
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    setResult(RESULT_OK);
+                    this.setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    return;
+                }
+
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(getApplicationContext(), "Pulse una vez más para salir", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
+        });
+
         Load();
 
         objWebMethods.getConfiguration(objCompany.getId());
         objWebMethods.getConfigurationXUser(objCompany.getId(), objUser.getEmployee().getPerson().getId());
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             setResult(RESULT_OK);
+
             super.onBackPressed();
             return;
         }
@@ -177,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    }
+    }*/
 
     @Override
     public void processFinish(WebServices.Result result, int processId) {
@@ -273,7 +298,6 @@ public class MainActivity extends AppCompatActivity implements WebServices.OnRes
         }
         catch (Exception e)
         {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String error_message = preferences.getBoolean("depuration", false) ? e.getMessage() : getString(R.string.message_web_services_error);
 
             Toast.makeText(getApplicationContext(), error_message, Toast.LENGTH_SHORT).show();
