@@ -15,7 +15,8 @@ import Data.MyDateTime;
 
 public class Employee implements Parcelable {
 
-    private int Id, ManagerId;
+    private Object Id;
+    private int ManagerId;
     private Person Person;
     private String JobName;
     private Date HireDate;
@@ -26,7 +27,7 @@ public class Employee implements Parcelable {
     }
 
     protected Employee(Parcel in) {
-        Id = in.readInt();
+        Id = in.readValue(getClass().getClassLoader());
         ManagerId = in.readInt();
         Person = in.readParcelable(Data.Objects.Person.class.getClassLoader());
         JobName = in.readString();
@@ -48,11 +49,11 @@ public class Employee implements Parcelable {
         }
     };
 
-    public int getId() {
+    public Object getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(Object id) {
         Id = id;
     }
 
@@ -119,7 +120,7 @@ public class Employee implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(Id);
+        dest.writeValue(Id);
         dest.writeInt(ManagerId);
         dest.writeParcelable(Person, flags);
         dest.writeString(JobName);
@@ -135,7 +136,7 @@ public class Employee implements Parcelable {
         {
             Employee objEmployee = new Employee();
 
-            objEmployee.setId(result.get("Id") != JSONObject.NULL ? result.getInt("Id") : 0);
+            objEmployee.setId(result.get("Id") != JSONObject.NULL ? result.get("Id") : null);
             objEmployee.setPerson(result.get("Person") != JSONObject.NULL ?
                     Data.Objects.Person.getItem(new JSONObject(result.get("Person").toString())) : null);
             objEmployee.setJobName(result.get("JobName") != JSONObject.NULL ? result.getString("JobName") : null);
@@ -150,7 +151,7 @@ public class Employee implements Parcelable {
         }
         catch (Exception e)
         {
-            Log.e("json_employee", e.getMessage());
+            Log.e("json_employee", e.getMessage() != null ? e.getMessage() : "");
             return null;
         }
     }

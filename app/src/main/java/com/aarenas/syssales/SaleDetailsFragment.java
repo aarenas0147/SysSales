@@ -221,7 +221,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
                     {
                         JSONArray jsonArray = new JSONArray(result.getResult().toString());
                         list = SaleDetail.getList(jsonArray);
-                        if (list != null && list.size() > 0)
+                        if (list != null && !list.isEmpty())
                         {
                             SaleDetailsAdapter<SaleDetail> adapter =
                                     new SaleDetailsAdapter<>(getActivity().getApplicationContext(), list);
@@ -371,7 +371,7 @@ public class SaleDetailsFragment extends Fragment implements WebServices.OnResul
         if (objSale != null)
         {
             float saleValue = 0F, subTotal = 0F, tax = 0F, total = 0F;
-            if (list != null && list.size() > 0)
+            if (list != null && !list.isEmpty())
             {
                 for (int i=0; i < list.size(); i++)
                 {

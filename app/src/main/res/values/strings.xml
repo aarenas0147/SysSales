@@ -97,6 +97,8 @@
     <string name="route">Ruta</string>
     <string name="credit_line">Línea de crédito</string>
     <string name="credit_line_balance">Saldo de crédito</string>
+    <string name="credit_line_by_vendor">Línea de crédito por vendedor</string>
+    <string name="credit_line_balance_by_vendor">Saldo de crédito por vendedor</string>
     <string name="product_id">Código del producto</string>
     <string name="calculator">Calculadora</string>
     <string name="sale_value">Valor de venta</string>

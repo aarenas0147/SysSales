@@ -52,9 +52,10 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
     //Controls:
     private Button btnCalculator_SaleSummaryFragment, btnSend_SaleSummaryFragment, btnExit_SaleSummaryFragment;
     private TextInputEditText etCreditLineAmount_SaleSummaryFragment, etCreditLineBalance_SaleSummaryFragment,
+            etCreditLineAmountByVendor_SaleSummaryFragment, etCreditLineBalanceByVendor_SaleSummaryFragment,
             etSaleValue_SaleSummaryFragment, etSubtotal_SaleSummaryFragment,
             etTaxes_SaleSummaryFragment, etTotal_SaleSummaryFragment;
-    private LinearLayout lytCreditLine_SaleSummaryFragment;
+    private LinearLayout lytCreditLine_SaleSummaryFragment, lytCreditLineByVendor_SaleSummaryFragment;
 
     //Parameters:
     private Bundle parameters;
@@ -63,7 +64,7 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
     private Company objCompany;
     Sale objSale = new Sale();
 
-    private float debtAmount, creditLineAmount;
+    private float creditLineAmount, creditLineByVendorAmount, creditLineByVendorBalance;
 
     //Variables:
     private SharedPreferences preferences;
@@ -91,13 +92,17 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
         btnExit_SaleSummaryFragment = rootView.findViewById(R.id.btnExit_SaleSummaryFragment);
         etCreditLineAmount_SaleSummaryFragment = rootView.findViewById(R.id.etCreditLineAmount_SaleSummaryFragment);
         etCreditLineBalance_SaleSummaryFragment = rootView.findViewById(R.id.etCreditLineBalance_SaleSummaryFragment);
+        etCreditLineAmountByVendor_SaleSummaryFragment = rootView.findViewById(R.id.etCreditLineAmountByVendor_SaleSummaryFragment);
+        etCreditLineBalanceByVendor_SaleSummaryFragment = rootView.findViewById(R.id.etCreditLineBalanceByVendor_SaleSummaryFragment);
         etSaleValue_SaleSummaryFragment = rootView.findViewById(R.id.etSaleValue_SaleSummaryFragment);
         etSubtotal_SaleSummaryFragment = rootView.findViewById(R.id.etSubtotal_SaleSummaryFragment);
         etTaxes_SaleSummaryFragment = rootView.findViewById(R.id.etTaxes_SaleSummaryFragment);
         etTotal_SaleSummaryFragment = rootView.findViewById(R.id.etTotal_SaleSummaryFragment);
         lytCreditLine_SaleSummaryFragment = rootView.findViewById(R.id.lytCreditLine_SaleSummaryFragment);
+        lytCreditLineByVendor_SaleSummaryFragment = rootView.findViewById(R.id.lytCreditLineByVendor_SaleSummaryFragment);
 
         lytCreditLine_SaleSummaryFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCreditLine() ? View.VISIBLE : View.GONE);
+        lytCreditLineByVendor_SaleSummaryFragment.setVisibility(objConfiguration != null && objConfiguration.isOptionCreditLine() ? View.VISIBLE : View.GONE);
 
         btnCalculator_SaleSummaryFragment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,6 +281,10 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
             etCreditLineAmount_SaleSummaryFragment.setText(MyMath.toDecimal(this.creditLineAmount, 2));
             etCreditLineBalance_SaleSummaryFragment.setText(MyMath.toDecimal(this.creditLineAmount -
                     this.objSale.getTotal(), 2));
+
+            etCreditLineAmountByVendor_SaleSummaryFragment.setText(MyMath.toDecimal(this.creditLineByVendorAmount, 2));
+            etCreditLineBalanceByVendor_SaleSummaryFragment.setText(MyMath.toDecimal(this.creditLineByVendorBalance -
+                    this.objSale.getTotal(), 2));
         }
     }
 
@@ -318,6 +327,26 @@ public class SaleSummaryFragment extends Fragment implements WebServices.OnResul
             if (objects.get("creditLineAmount") != null)
             {
                 this.creditLineAmount = Float.parseFloat(objects.get("creditLineAmount").toString());
+
+                if (getView() != null)
+                {
+                    Load();
+                }
+            }
+
+            if (objects.get("creditLineByVendorAmount") != null)
+            {
+                this.creditLineByVendorAmount = Float.parseFloat(objects.get("creditLineByVendorAmount").toString());
+
+                if (getView() != null)
+                {
+                    Load();
+                }
+            }
+
+            if (objects.get("creditLineByVendorBalance") != null)
+            {
+                this.creditLineByVendorBalance = Float.parseFloat(objects.get("creditLineByVendorBalance").toString());
 
                 if (getView() != null)
                 {

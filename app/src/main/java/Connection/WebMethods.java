@@ -54,10 +54,11 @@ public class WebMethods {
     public static final int TYPE_LIST_CREDIT_SALES = 48;
     public static final int TYPE_LIST_CREDIT_SALES_PENDING_BY_CUSTOMER = 49;
     public static final int TYPE_LIST_CREDIT_LINE_BY_CUSTOMER = 50;
-    public static final int TYPE_LIST_CREDIT_SALE_QUOTES = 51;
-    public static final int TYPE_NEW_CREDIT_SALE_QUOTE = 52;
-    public static final int TYPE_SAVE_CREDIT_SALE_QUOTE = 53;
-    public static final int TYPE_DELETE_CREDIT_SALE_QUOTE = 54;
+    public static final int TYPE_LIST_CREDIT_LINE_BY_VENDOR = 51;
+    public static final int TYPE_LIST_CREDIT_SALE_QUOTES = 52;
+    public static final int TYPE_NEW_CREDIT_SALE_QUOTE = 53;
+    public static final int TYPE_SAVE_CREDIT_SALE_QUOTE = 54;
+    public static final int TYPE_DELETE_CREDIT_SALE_QUOTE = 55;
 
     //Variables:
     private Context context;
@@ -73,7 +74,7 @@ public class WebMethods {
 
     public void findUser(String user, String password)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "findUser";
 
@@ -91,7 +92,7 @@ public class WebMethods {
 
     public void getCompany()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCompany";
 
@@ -107,7 +108,7 @@ public class WebMethods {
 
     public void getConfiguration(Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getConfiguration";
 
@@ -124,7 +125,7 @@ public class WebMethods {
 
     public void getConfigurationXUser(Object company, Object userId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getConfigurationXUser";
 
@@ -142,7 +143,7 @@ public class WebMethods {
 
     public void getNotifications()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getNotifications";
 
@@ -158,7 +159,7 @@ public class WebMethods {
 
     public void openSale(int personId, int userId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "openSale";
 
@@ -177,7 +178,7 @@ public class WebMethods {
 
     public void getVoucherTypes()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getVoucherTypes";
 
@@ -193,7 +194,7 @@ public class WebMethods {
 
     public void getPaymentConditions()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getPaymentConditions";
 
@@ -209,7 +210,7 @@ public class WebMethods {
 
     public void getPaymentMethods()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getPaymentMethods";
 
@@ -225,7 +226,7 @@ public class WebMethods {
 
     public void getPaymentMethodDetails(Object paymentMethod)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getPaymentMethodDetails";
 
@@ -242,7 +243,7 @@ public class WebMethods {
 
     public void getSalePaymentMethods(Object id, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getSalePaymentMethods";
 
@@ -260,7 +261,7 @@ public class WebMethods {
 
     public void addSalePaymentMethod(Object id, Object paymentMethod, Object paymentMethodDetail, Object company, float amount)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "addSalePaymentMethod";
 
@@ -281,7 +282,7 @@ public class WebMethods {
 
     public void modifySalePaymentMethod(Object id, Object paymentMethod, Object paymentMethodDetail, Object company, float amount)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "modifySalePaymentMethod";
 
@@ -302,7 +303,7 @@ public class WebMethods {
 
     public void deleteSalePaymentMethod(Object id, Object paymentMethod, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "deleteSalePaymentMethod";
 
@@ -321,7 +322,7 @@ public class WebMethods {
 
     public void getTempSaleHeader(Object id, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getTempSaleHeader";
 
@@ -339,7 +340,7 @@ public class WebMethods {
 
     public void getTempSaleDetails(Object id, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getTempSaleDetails";
 
@@ -358,7 +359,7 @@ public class WebMethods {
     public void addItem(Object id, Object productId, Object company,
                         int personId, String voucherType, Object paymentCondition, float quantity, float price)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "addItem";
 
@@ -383,7 +384,7 @@ public class WebMethods {
     public void modifyItem(Object id, Object productId, Object company, int personId, String voucherType, Object paymentCondition,
                            float quantity, float newQuantity,float price)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "modifyItem";
 
@@ -408,7 +409,7 @@ public class WebMethods {
 
     public void deleteItem(Object id, Object productId, String voucherType, float quantity)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "deleteItem";
 
@@ -430,7 +431,7 @@ public class WebMethods {
                          Object paymentCondition, Object paymentMethod, String issueDate, String expirationDate,
                          String currentDateTime, Object customerId, int personId, int userId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "saveSale";
 
@@ -457,7 +458,7 @@ public class WebMethods {
 
     public void cancelSale(Object id, Object vendorId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "cancelSale";
 
@@ -476,7 +477,7 @@ public class WebMethods {
 
     public void printSale(Object id, int userId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "printSale";
 
@@ -495,7 +496,7 @@ public class WebMethods {
 
     public void printSaleInPDF(Object id, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "printSaleInPDF";
 
@@ -513,7 +514,7 @@ public class WebMethods {
 
     public void getCustomers()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCustomers";
 
@@ -529,7 +530,7 @@ public class WebMethods {
 
     public void getCustomerById(Object id)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCustomerById";
 
@@ -546,7 +547,7 @@ public class WebMethods {
 
     public void getCustomersByBusinessName(String businessName)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCustomersByBusinessName";
 
@@ -563,7 +564,7 @@ public class WebMethods {
 
     public void getCustomersByVendor(int vendorId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCustomersByVendor";
 
@@ -580,7 +581,7 @@ public class WebMethods {
 
     public void getCustomerDefault()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCustomerDefault";
 
@@ -596,7 +597,7 @@ public class WebMethods {
 
     public void findPersonOnlineByDocumentNumber(String id)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "findPersonOnlineByDocumentNumber";
 
@@ -613,7 +614,7 @@ public class WebMethods {
 
     public void getProductById(Object id, Object company, Object outlet)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getProductById";
 
@@ -632,7 +633,7 @@ public class WebMethods {
 
     public void getProductsByDescription(String description, Object company, Object outlet)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getProductsByDescription";
 
@@ -651,7 +652,7 @@ public class WebMethods {
 
     public void getPresentations(Object id, Object company, Object outlet)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getPresentations";
 
@@ -670,7 +671,7 @@ public class WebMethods {
 
     public void getStockByPresentation(Object presentationId, Object company, Object outlet)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getStockByPresentation";
 
@@ -689,7 +690,7 @@ public class WebMethods {
 
     public void newCustomer()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "newCustomer";
 
@@ -705,7 +706,7 @@ public class WebMethods {
 
     public void getBusinessLine()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getBusinessLine";
 
@@ -721,7 +722,7 @@ public class WebMethods {
 
     public void getZones()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getZones";
 
@@ -737,7 +738,7 @@ public class WebMethods {
 
     public void getRoutesByZone(Object id)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getRoutesByZone";
 
@@ -754,7 +755,7 @@ public class WebMethods {
 
     public void findVendorByRoute(Object id)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "findVendorByRoute";
 
@@ -774,7 +775,7 @@ public class WebMethods {
                                String documentType, String address, String reference, String phone, String email,
                                Object zoneId, Object routeId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "insertCustomer";
 
@@ -807,7 +808,7 @@ public class WebMethods {
                                String documentType, String address, String reference, String phone, String email,
                                Object zoneId, Object routeId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "modifyCustomer";
 
@@ -837,7 +838,7 @@ public class WebMethods {
 
     public void getSheet(String date, Object vendorId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getSheet";
 
@@ -855,7 +856,7 @@ public class WebMethods {
 
     public void getVendors()
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getVendors";
 
@@ -871,7 +872,7 @@ public class WebMethods {
 
     public void getSalesByVendorHeader(String date, Object vendorId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getSalesByVendorHeader";
 
@@ -890,7 +891,7 @@ public class WebMethods {
 
     public void getSalesByVendorDetails(String date, Object vendorId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getSalesByVendorDetails";
 
@@ -909,7 +910,7 @@ public class WebMethods {
 
     public void getSaleDetailsBySale(Object id, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getSaleDetailsBySale";
 
@@ -927,7 +928,7 @@ public class WebMethods {
 
     public void getTotalAmountCreditSales(Object vendorId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getTotalAmountCreditSales";
 
@@ -944,7 +945,7 @@ public class WebMethods {
 
     public void getCreditSales(Object vendorId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCreditSales";
 
@@ -961,7 +962,7 @@ public class WebMethods {
 
     public void getCreditSaleQuotes(Object creditSaleId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCreditSaleQuotes";
 
@@ -978,7 +979,7 @@ public class WebMethods {
 
     public void getCreditSalesPendingByCustomer(Object customerId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCreditSalesPendingByCustomer";
 
@@ -996,7 +997,7 @@ public class WebMethods {
 
     public void getCreditLineByCustomer(Object customerId, Object company)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "getCreditLineByCustomer";
 
@@ -1012,9 +1013,27 @@ public class WebMethods {
         }
     }
 
+    public void getCreditLineByVendor(Object vendorId, Object company)
+    {
+        if (config != null && !config.getServer().isEmpty())
+        {
+            final String methodName = "getCreditLineByVendor";
+
+            WebServices webServices = new WebServices(config.getNamespace(),
+                    String.format("http://%s/%s", config.getServer(), "Customers.asmx"), methodName,
+                    String.format("%s%s", config.getNamespace(), methodName),
+                    this.context, this.listener,
+                    TYPE_LIST_CREDIT_LINE_BY_VENDOR);
+
+            webServices.addParameter("vendorId", vendorId);
+            webServices.addParameter("company", company);
+            webServices.execute();
+        }
+    }
+
     public void newCreditSaleQuote(Object creditSaleId)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "newCreditSaleQuote";
 
@@ -1032,7 +1051,7 @@ public class WebMethods {
     public void saveCreditSaleQuote(Object creditSaleId, int creditSaleQuoteNumber, Object customerId,
                                     float payment, String amortizationDate)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "saveCreditSaleQuote";
 
@@ -1053,7 +1072,7 @@ public class WebMethods {
 
     public void deleteCreditSaleQuote(Object creditSaleId, int creditSaleQuoteNumber)
     {
-        if (config != null && !config.getServer().equals(""))
+        if (config != null && !config.getServer().isEmpty())
         {
             final String methodName = "deleteCreditSaleQuote";
 

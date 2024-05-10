@@ -49,6 +49,7 @@ import Data.Objects.Company;
 import Data.Objects.Configuration;
 import Data.Objects.ConstantData;
 import Data.Objects.CreditLine;
+import Data.Objects.CreditLineByVendor;
 import Data.Objects.CreditSale;
 import Data.Objects.Customer;
 import Data.Objects.PaymentCondition;
@@ -112,6 +113,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     //Asynctask:
     private List<CreditSale> listCreditSaleByCustomer = null;
     private List<CreditLine> listCreditLineByCustomer = null;
+    private List<CreditLineByVendor> listCreditLineByVendor = null;
 
     //Variables:
     private SharedPreferences preferences;
@@ -120,6 +122,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
     private Calendar expiryDate = Calendar.getInstance();
     private float balance = 0F;
     private float creditLineAmount = 0F, debtAmount = 0F;
+    private float creditLineByVendorAmount = 0F, creditLineByVendorBalance = 0F;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -328,7 +331,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
                 String customerId = etCustomerId_SaleDataFragment.getText().toString();
 
-                if (customerId.length() > 0)
+                if (!customerId.isEmpty())
                 {
                     objWebMethods.getCustomerById(customerId);
                 }
@@ -487,7 +490,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     {
                         JSONArray jsonArray = new JSONArray(result.getResult().toString());
                         listCreditSaleByCustomer = CreditSale.getList(jsonArray);
-                        if (listCreditSaleByCustomer != null && listCreditSaleByCustomer.size() > 0)
+                        if (listCreditSaleByCustomer != null && !listCreditSaleByCustomer.isEmpty())
                         {
                             debtAmount = 0F;
                             for (int i = 0; i < listCreditSaleByCustomer.size(); i++)
@@ -543,13 +546,25 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
                     {
                         JSONArray jsonArray = new JSONArray(result.getResult().toString());
                         listCreditLineByCustomer = CreditLine.getList(jsonArray);
-                        if (listCreditLineByCustomer != null && listCreditLineByCustomer.size() > 0)
+                        if (listCreditLineByCustomer != null && !listCreditLineByCustomer.isEmpty())
                         {
                             this.creditLineAmount = (debtAmount < listCreditLineByCustomer.get(0).getAmount() ?
                                     listCreditLineByCustomer.get(0).getAmount() - debtAmount : 0F);
                         }
 
                         validatePaymentCondition();
+                        InteractionFragment();
+                    }
+                    else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_VENDOR)
+                    {
+                        JSONArray jsonArray = new JSONArray(result.getResult().toString());
+                        listCreditLineByVendor = CreditLineByVendor.getList(jsonArray);
+                        if (listCreditLineByVendor != null && !listCreditLineByVendor.isEmpty())
+                        {
+                            this.creditLineByVendorAmount = listCreditLineByVendor.get(0).getAmount();
+                            this.creditLineByVendorBalance = listCreditLineByVendor.get(0).getBalance();
+                        }
+
                         InteractionFragment();
                     }
                 }
@@ -661,6 +676,10 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
 
                         validatePaymentCondition();
                     }
+                    else if (processId == WebMethods.TYPE_LIST_CREDIT_LINE_BY_VENDOR)
+                    {
+                        this.creditLineByVendorAmount = 0F;
+                    }
                 }
             }
             else if (result.getResultCode().getId() == WebServices.Result.RESULT_OFFLINE)
@@ -727,6 +746,7 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         objWebMethods.getPaymentConditions();
         objWebMethods.getPaymentMethods();
         objWebMethods.getCustomerDefault();
+        objWebMethods.getCreditLineByVendor(objUser.getEmployee().getPerson().getId(), objCompany.getId());
         //objWebMethods.getTempSaleHeader(saleId);
     }
 
@@ -786,6 +806,8 @@ public class SaleDataFragment extends Fragment implements WebServices.OnResult {
         }
         //objects.put("balance", balance);
         objects.put("creditLineAmount", this.creditLineAmount);
+        objects.put("creditLineByVendorAmount", this.creditLineByVendorAmount);
+        objects.put("creditLineByVendorBalance", this.creditLineByVendorBalance);
 
         mListener.onFragmentInteraction(objects, fragment_1);
     }
